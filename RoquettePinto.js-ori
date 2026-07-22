@@ -177,4 +177,3 @@ draw(ctx) {
     ctx.lineTo(this.x + 58 - legSwing, this.y + 145);
     ctx.stroke();
 }
-}

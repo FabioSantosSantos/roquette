@@ -13,24 +13,116 @@ class Game {
     
     this.questions = [
       {
-        text: "CAPÍTULO 1 - CHEGADA À CIDADE\n\nRoquette-Pinto chegou ao sertão e encontrou uma população sem acesso à escola. Entre os objetos existe uma pista que revela o ano que iniciou a revolução da educação pelo rádio.",
-        options: ["Jornal 1912","Certificado 1923","Calendário 1938","Revista 1950"],
-        correct: 1
+        text: `FREQUÊNCIA 1 – O início de uma grande ideia
+Uma das memórias perdidas foi encontrada. Analise a fonte histórica.
+Fonte histórica:
+\"A ideia consiste em levar música aos lares por meio da transmissão sem fios.\"
+Ao ler essa fonte, qual inovação ela destaca?`,
+        options: [
+          "A possibilidade de transmitir sons e informações sem o uso de fios.",
+          "A criação da televisão.",
+          "A invenção do telefone celular.",
+          "A transmissão de imagens pela internet."
+        ],
+        correct: 0
       },
       {
-        text: "CAPÍTULO 2 - A GRANDE IDEIA\n\nRoquette-Pinto procura uma tecnologia capaz de levar conhecimento para lugares onde não existem escolas.",
-        options: ["Jornal","Rádio","Cinema","Telégrafo"],
-        correct: 1
+        text:`FREQUÊNCIA 2
+
+Em 7 de setembro de 1922 ocorreu a primeira transmissão oficial de rádio no Brasil.
+
+Qual acontecimento estava sendo celebrado?`,
+        options:[
+          "A Proclamação da República.",
+          "A inauguração da Rádio Sociedade.",
+          "O centenário da Independência do Brasil.",
+          "A criação do Ministério das Comunicações."
+        ],
+        correct:2
       },
       {
-        text: "CAPÍTULO 3 - A PRIMEIRA RÁDIO\n\nQual instituição representa a emissora educativa criada por Roquette-Pinto?",
-        options: ["Rádio Nacional","Rádio MEC","Rádio Sociedade","Rádio Tupi"],
-        correct: 2
+        text:`FREQUÊNCIA 3 – Novas conexões
+
+De acordo com a fonte, por que o radioamadorismo começou a ganhar força no início do século XX?`,
+        options:[
+          "Porque as pessoas buscavam novas formas de comunicação e tinham interesse em experimentar a tecnologia.",
+          "Porque já existia internet em todo o país.",
+          "Porque o rádio era utilizado apenas para ouvir músicas.",
+          "Porque todas as cidades já possuíam sistemas eficientes de telefonia."
+        ],
+        correct:0
       },
       {
-        text: "CAPÍTULO 4 - EDUCAÇÃO PELO AR\n\nQual conteúdo ajudaria mais na formação educacional da população?",
-        options: ["Humor","Música Popular","Programas Educativos","Propaganda"],
-        correct: 2
+        text:`FREQUÊNCIA 4 – Sintonizando 1926
+
+Se você fosse um morador daquela época, qual mensagem esse anúncio provavelmente transmitiria?`,
+        options:[
+          "Ter um rádio aproxima sua casa das novidades, da música e das informações.",
+          "O rádio será substituído em breve por outra tecnologia.",
+          "O rádio é um equipamento de uso exclusivo das fábricas.",
+          "Somente especialistas podem utilizar um rádio."
+        ],
+        correct:0
+      },
+      {
+        text:`FREQUÊNCIA 5
+
+Se empresas passaram a fabricar e vender aparelhos de rádio no Brasil, o que isso indica?`,
+        options:[
+          "O rádio estava se tornando cada vez mais popular.",
+          "O rádio deixava de ser utilizado.",
+          "O rádio era usado apenas por cientistas.",
+          "O rádio só funcionava em outros países."
+        ],
+        correct:0
+      },
+      {
+        text:`CAPÍTULO 2 - FREQUÊNCIA 1
+
+Ao chamar o rádio de 'o livro dos que não sabiam ler', o que Roquette-Pinto queria destacar?`,
+        options:[
+          "Que o rádio poderia levar conhecimento também às pessoas que não sabiam ler.",
+          "Que o rádio substituiria os livros.",
+          "Que apenas as escolas poderiam usar o rádio.",
+          "Que o rádio transmitia apenas aulas de alfabetização."
+        ],
+        correct:0
+      },
+      {
+        text:`CAPÍTULO 2 - FREQUÊNCIA 2
+
+Qual era o principal objetivo de Roquette-Pinto ao criar a Rádio Sociedade?`,
+        options:[
+          "Promover apenas programas musicais.",
+          "Difundir educação, ciência e cultura para a população.",
+          "Vender aparelhos de rádio.",
+          "Transmitir propagandas comerciais."
+        ],
+        correct:1
+      },
+      {
+        text:`CAPÍTULO 2 - FREQUÊNCIA 3
+
+O que Ariosto Espinheira pretendia ao ensinar Geografia pelo rádio?`,
+        options:[
+          "Ajudar os estudantes a conhecerem melhor as diferentes regiões do Brasil.",
+          "Ensinar apenas a localização das capitais.",
+          "Divulgar notícias sobre as cidades brasileiras.",
+          "Incentivar viagens entre os estados."
+        ],
+        correct:0
+      },
+      {
+        text:`CAPÍTULO 2 - FREQUÊNCIA 4
+
+O que a utilização de recursos de sonoplastia permitiu ao programa de rádio?`,
+        options:[
+          "Aproximar os ouvintes das histórias por meio da imaginação.",
+          "Ensinar apenas por imagens.",
+          "Substituir os professores.",
+          "Divulgar propagandas comerciais."
+        ],
+        correct:0
       }
     ]
 
@@ -94,27 +186,49 @@ async initSave() {
     }
   }
 
-  loadQuestion(index) {
+ loadQuestion(index) {
+
     if (this.bg) this.bg.setScenario(index);
+
     const q = this.questions[index];
-    document.getElementById('questionDisplay').innerText = q.text;
+
+    document.getElementById('questionDisplay').innerHTML = q.text;
 
     this.entities = this.entities.filter(e => !(e instanceof Moringa));
     this.moringas = [];
 
-    const margin = 20;
-    const startX = 100 + margin;
-    const endX = this.logicalWidth - 120 - margin;
-    const availableWidth = Math.max(endX - startX, 0);
-    const spacing = q.options.length > 1 ? availableWidth / (q.options.length - 1) : 0;
+    // Largura ocupada por cada conjunto (rádio + caixa)
+    const objectWidth = 270;
+
+    // Margens laterais
+    const leftMargin = 30;
+    const rightMargin = 40;
+
+    // Área útil
+    const usableWidth = this.logicalWidth - leftMargin - rightMargin;
+
+    // Espaçamento entre centros dos objetos
+    const spacing = usableWidth / q.options.length;
 
     q.options.forEach((opt, i) => {
-      const isCorrect = (i === q.correct);
-      const m = new Moringa(startX + i * spacing, this.logicalHeight - 200 -200 , opt, isCorrect);
-      this.moringas.push(m);
-      this.entities.push(m);
+
+        const x = leftMargin + i * spacing;
+
+        const y = this.logicalHeight - 400;
+
+        const m = new Moringa(
+            x,
+            y,
+            opt,
+            i === q.correct
+        );
+
+        this.moringas.push(m);
+        this.entities.push(m);
+
     });
-  }
+
+}
 
   screenToWorld(canvasX, canvasY) {
     return { x: canvasX + this.scrollX, y: canvasY + this.scrollY };
