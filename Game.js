@@ -17,7 +17,7 @@ class Game {
 Uma das memórias perdidas foi encontrada. Analise a fonte histórica.
 Fonte histórica:
 \"A ideia consiste em levar música aos lares por meio da transmissão sem fios.\"
-Ao ler essa fonte, qual inovação ela destaca?`,
+Ao ler essa fonte, qual inovação ela destaca? - SARNOFF apud OLIVEIRA (2011, p.23). Em: OLIVEIRA.`,
         options: [
           "A possibilidade de transmitir sons e informações sem o uso de fios.",
           "A criação da televisão.",
