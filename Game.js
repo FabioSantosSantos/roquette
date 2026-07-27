@@ -12,8 +12,7 @@ class Game {
     this.currentQuestionIndex = 0;
     
     this.questions = [
-      {
-        text: `FREQUÊNCIA 1 – O início de uma grande ideia
+      {text: `FREQUÊNCIA 1 – O início de uma grande ideia
 Uma das memórias perdidas foi encontrada. Analise a fonte histórica.
 Fonte histórica:
 \"A ideia consiste em levar música aos lares por meio da transmissão sem fios.\"
