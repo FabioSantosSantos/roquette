@@ -393,7 +393,7 @@ async initSave() {
         "Excelente! 1923 marcou o início da jornada educacional de Roquette-Pinto.",
         "Correto! O rádio seria capaz de alcançar milhares de brasileiros.",
         "Muito bem! A Rádio Sociedade tornou-se um marco da educação pelo rádio.",
-        "Excelente! Educação e ciência eram prioridades das transmissões."
+        "Excelente! Educação e ciência eram prioridades das transmissões.",
         "Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes."
       ];
 
