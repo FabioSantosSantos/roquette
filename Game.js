@@ -70,7 +70,7 @@ De acordo com a fonte, por que o radioamadorismo começou
 a ganhar força no início do século XX?
 `,
 options:[
-"Because as pessoas buscavam novas formas de comunicação e tinham interesse em experimentar a tecnologia.",
+"Porque as pessoas buscavam novas formas de comunicação e tinham interesse em experimentar a tecnologia.",
 "Porque já existia internet em todo o país.",
 "Porque o rádio era utilizado apenas para ouvir músicas.",
 "Porque todas as cidades já possuíam sistemas eficientes de telefonia."
