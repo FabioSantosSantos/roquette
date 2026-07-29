@@ -242,7 +242,6 @@ async initSave() {
       if (r.width <= 0 || r.height <= 0) return;
       this.canvas.width  = Math.floor(r.width  * dpr);
       this.canvas.height = Math.floor(r.height * dpr);
-      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       this.ctx.scale(dpr, dpr);
       this.logicalWidth = r.width;
       this.logicalHeight = r.height;
