@@ -390,7 +390,6 @@ async initSave() {
       this.score += 10;
 
       const messages = [
-        "Exato! Através do rádio se podia enviar sons aos lares sem uso de fios."
         "Excelente! 1923 marcou o início da jornada educacional de Roquette-Pinto.",
         "Correto! O rádio seria capaz de alcançar milhares de brasileiros.",
         "Muito bem! A Rádio Sociedade tornou-se um marco da educação pelo rádio.",
