@@ -136,12 +136,13 @@ Ao chamar o rádio de "o livro dos que não sabiam ler",
 o que Roquette-Pinto queria destacar?
 `,
 options:[
-"Que o rádio poderia levar conhecimento também às pessoas que não sabiam ler.",
+"Que o rádio transmitia apenas aulas de alfabetização.",
 "Que o rádio substituiria os livros.",
 "Que apenas as escolas poderiam usar o rádio.",
-"Que o rádio transmitia apenas aulas de alfabetização."
+"Que o rádio poderia levar conhecimento também às pessoas que não sabiam ler."
+
 ],
-correct:0
+correct:3
 },
 
 {
@@ -185,12 +186,13 @@ apud COELHO, 2016.
 O que Ariosto Espinheira pretendia ao ensinar Geografia pelo rádio?
 `,
 options:[
-"Ajudar os estudantes a conhecerem melhor as diferentes regiões do Brasil.",
+,
 "Ensinar apenas a localização das capitais.",
 "Divulgar notícias sobre as cidades brasileiras.",
-"Incentivar viagens entre os estados."
+"Incentivar viagens entre os estados.",
+"Ajudar os estudantes a conhecerem melhor as diferentes regiões do Brasil."
 ],
-correct:0
+correct:3
 },
 
 {
@@ -210,14 +212,14 @@ COELHO, 2016, p.162.
 O que essa estratégia permitiu ao programa de rádio?
 `,
 options:[
-"Aproximar os ouvintes das histórias por meio da imaginação.",
 "Ensinar apenas por imagens.",
+"Aproximar os ouvintes das histórias por meio da imaginação.",
 "Substituir os professores.",
 "Divulgar propagandas comerciais."
 ],
 
 
-        correct:0
+        correct:1
       }
     ]
 
