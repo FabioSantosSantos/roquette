@@ -12,114 +12,211 @@ class Game {
     this.currentQuestionIndex = 0;
     
     this.questions = [
-      {text: `FREQUÊNCIA 1 – O início de uma grande ideia
-Uma das memórias perdidas foi encontrada. Analise a fonte histórica.
-Fonte histórica: "A ideia consiste em levar música aos lares por meio da transmissão sem fios." - SARNOFF apud OLIVEIRA (2011, p.23). Em: OLIVEIRA.
-Ao ler essa fonte, qual inovação ela destaca? `,
-        options: [
-          "A possibilidade de transmitir sons e informações sem o uso de fios.",
-          "A criação da televisão.",
-          "A invenção do telefone celular.",
-          "A transmissão de imagens pela internet."
-        ],
-        correct: 0
-      },
-      {
-        text:`FREQUÊNCIA 2
+{
+text: `📻 Frequência 1 – O início de uma grande ideia
+Umas das memórias perdidas foi encontrada. Analise a primeira fonte histórica. Ela contém uma pista sobre a origem de uma das maiores revoluções da comunicação.
+"A ideia consiste em levar música aos lares por meio da transmissão sem fios."
+Fonte: SARNOFF apud OLIVEIRA (2011, p.23). Em: OLIVEIRA.
+Ao ler essa fonte, qual inovação ela destaca?
 
-Em 7 de setembro de 1922 ocorreu a primeira transmissão oficial de rádio no Brasil.
+`,
+options:[
+"A possibilidade de transmitir sons e informações sem o uso de fios.",
+"A criação da televisão.",
+"A invenção do telefone celular.",
+"A transmissão de imagens pela internet."
+],
+correct:0
+},
 
-Qual acontecimento estava sendo celebrado?`,
-        options:[
-          "A Proclamação da República.",
-          "A inauguração da Rádio Sociedade.",
-          "O centenário da Independência do Brasil.",
-          "A criação do Ministério das Comunicações."
-        ],
-        correct:2
-      },
-      {
-        text:`FREQUÊNCIA 3 – Novas conexões
+{
+text:`
+📻 Frequência 2
+"No dia 7 de setembro de 1922, durante a comemoração do centenário da Independência,
+brasileiros ouviram pela primeira vez uma transmissão de rádio..."
+Fonte: BRASIL. Ministério das Comunicações.
+Primeira transmissão oficial, em 1922, marcou o início do rádio no Brasil.
+Publicado em 6 set. 2022.
+Você acabou de chegar ao Rio de Janeiro, em 7 de setembro de 1922.
+Ao ligar um rádio experimental, você ouve um discurso que ficará marcado
+na história do Brasil.
+Descubra qual acontecimento histórico estava sendo celebrado durante
+essa primeira transmissão oficial de rádio.
+`,
+options:[
+"A Proclamação da República.",
+"A inauguração da Rádio Sociedade.",
+"O centenário da Independência do Brasil.",
+"A criação do Ministério das Comunicações."
+],
+correct:2
+},
 
-De acordo com a fonte, por que o radioamadorismo começou a ganhar força no início do século XX?`,
-        options:[
-          "Porque as pessoas buscavam novas formas de comunicação e tinham interesse em experimentar a tecnologia.",
-          "Porque já existia internet em todo o país.",
-          "Porque o rádio era utilizado apenas para ouvir músicas.",
-          "Porque todas as cidades já possuíam sistemas eficientes de telefonia."
-        ],
-        correct:0
-      },
-      {
-        text:`FREQUÊNCIA 4 – Sintonizando 1926
+{
+text:`
+📻 Frequência 3 – Novas conexões
 
-Se você fosse um morador daquela época, qual mensagem esse anúncio provavelmente transmitiria?`,
-        options:[
-          "Ter um rádio aproxima sua casa das novidades, da música e das informações.",
-          "O rádio será substituído em breve por outra tecnologia.",
-          "O rádio é um equipamento de uso exclusivo das fábricas.",
-          "Somente especialistas podem utilizar um rádio."
-        ],
-        correct:0
-      },
-      {
-        text:`FREQUÊNCIA 5
+Uma nova memória foi restaurada.
+Analise a fonte histórica e descubra o que impulsionou
+o surgimento do radioamadorismo.
+"Assim, duas foram as motrizes que alavancaram o radioamadorismo:
+a curiosidade técnica e a necessidade de suprir lacunas de comunicação
+entre pontos remotos..."
+Fonte: FRANCO, Carlos Fernando Martins; MENESES, Verônica Dantas.
+Radioamadorismo: comunicação, individualidade, comunidade.
+Anais do XXXVII Congresso Brasileiro de Ciências da Comunicação
+(INTERCOM), 2014.
+De acordo com a fonte, por que o radioamadorismo começou
+a ganhar força no início do século XX?
+`,
+options:[
+"Because as pessoas buscavam novas formas de comunicação e tinham interesse em experimentar a tecnologia.",
+"Porque já existia internet em todo o país.",
+"Porque o rádio era utilizado apenas para ouvir músicas.",
+"Porque todas as cidades já possuíam sistemas eficientes de telefonia."
+],
+correct:0
+},
 
-Se empresas passaram a fabricar e vender aparelhos de rádio no Brasil, o que isso indica?`,
-        options:[
-          "O rádio estava se tornando cada vez mais popular.",
-          "O rádio deixava de ser utilizado.",
-          "O rádio era usado apenas por cientistas.",
-          "O rádio só funcionava em outros países."
-        ],
-        correct:0
-      },
-      {
-        text:`CAPÍTULO 2 - FREQUÊNCIA 1
+{
+text:`
+📻 Frequência 4 – Sintonizando 1926
 
-Ao chamar o rádio de 'o livro dos que não sabiam ler', o que Roquette-Pinto queria destacar?`,
-        options:[
-          "Que o rádio poderia levar conhecimento também às pessoas que não sabiam ler.",
-          "Que o rádio substituiria os livros.",
-          "Que apenas as escolas poderiam usar o rádio.",
-          "Que o rádio transmitia apenas aulas de alfabetização."
-        ],
-        correct:0
-      },
-      {
-        text:`CAPÍTULO 2 - FREQUÊNCIA 2
+Você acaba de desembarcar em 1926.
+Uma vitrine exibe um grande anúncio da Philips.
+As pessoas param para observá-lo com curiosidade.
 
-Qual era o principal objetivo de Roquette-Pinto ao criar a Rádio Sociedade?`,
-        options:[
-          "Promover apenas programas musicais.",
-          "Difundir educação, ciência e cultura para a população.",
-          "Vender aparelhos de rádio.",
-          "Transmitir propagandas comerciais."
-        ],
-        correct:1
-      },
-      {
-        text:`CAPÍTULO 2 - FREQUÊNCIA 3
+Se você fosse um morador daquela época,
+qual mensagem esse anúncio provavelmente transmitiria?
+`,
+options:[
+"Ter um rádio aproxima sua casa das novidades, da música e das informações.",
+"O rádio será substituído em breve por outra tecnologia.",
+"O rádio é um equipamento de uso exclusivo das fábricas.",
+"Somente especialistas podem utilizar um rádio."
+],
+correct:0
+},
 
-O que Ariosto Espinheira pretendia ao ensinar Geografia pelo rádio?`,
-        options:[
-          "Ajudar os estudantes a conhecerem melhor as diferentes regiões do Brasil.",
-          "Ensinar apenas a localização das capitais.",
-          "Divulgar notícias sobre as cidades brasileiras.",
-          "Incentivar viagens entre os estados."
-        ],
-        correct:0
-      },
-      {
-        text:`CAPÍTULO 2 - FREQUÊNCIA 4
+{
+text:`
+📻 Frequência 5
 
-O que a utilização de recursos de sonoplastia permitiu ao programa de rádio?`,
-        options:[
-          "Aproximar os ouvintes das histórias por meio da imaginação.",
-          "Ensinar apenas por imagens.",
-          "Substituir os professores.",
-          "Divulgar propagandas comerciais."
-        ],
+Se empresas passaram a fabricar e vender aparelhos de rádio no Brasil,
+o que isso indica?
+`,
+options:[
+"O rádio estava se tornando cada vez mais popular.",
+"O rádio deixava de ser utilizado.",
+"O rádio era usado apenas por cientistas.",
+"O rádio só funcionava em outros países."
+],
+correct:0
+},
+{
+text:`
+📖 CAPÍTULO 2
+
+📻 Frequência 1 – A missão educativa de Roquette-Pinto
+
+Em 1923, o educador Edgar Roquette-Pinto criou a Rádio Sociedade do Rio de Janeiro,
+acreditando que o rádio poderia levar educação e cultura a todos.
+
+Fonte histórica
+
+"[...] A rádio foi projetada para ser uma verdadeira 'escola' [...]
+Foi idealizada para ser, nas palavras de Roquette,
+'o livro dos que não sabiam ler'."
+
+LIMA, Nísia Trindade; SÁ, Dominichi Miranda de.
+Roquette-Pinto: ciência e humanismo no Brasil do século XX.
+ANPUH, 2005, p. 8.
+
+Ao chamar o rádio de "o livro dos que não sabiam ler",
+o que Roquette-Pinto queria destacar?
+`,
+options:[
+"Que o rádio poderia levar conhecimento também às pessoas que não sabiam ler.",
+"Que o rádio substituiria os livros.",
+"Que apenas as escolas poderiam usar o rádio.",
+"Que o rádio transmitia apenas aulas de alfabetização."
+],
+correct:0
+},
+
+{
+text:`
+📻 Frequência 2 – A criação da Rádio Sociedade
+
+Fonte histórica
+
+"Roquette-Pinto foi o principal idealizador da Rádio Sociedade do Rio de Janeiro."
+
+MOREIRA; MASSARANI, 2001.
+
+Qual era o principal objetivo de Roquette-Pinto ao criar a Rádio Sociedade?
+`,
+options:[
+"Promover apenas programas musicais.",
+"Difundir educação, ciência e cultura para a população.",
+"Vender aparelhos de rádio.",
+"Transmitir propagandas comerciais."
+],
+correct:1
+},
+
+{
+text:`
+📻 Frequência 3 – Ariosto Espinheira
+
+Uma nova memória foi encontrada.
+Ariosto Espinheira transformou o rádio em uma verdadeira sala de aula sobre o Brasil.
+
+Fonte histórica
+
+"O Brasil foi apresentado aos estudantes de forma inédita:
+como um país dividido em cinco regiões segundo suas características naturais."
+
+ESPINHEIRA, 1938, p.42,
+apud COELHO, 2016.
+
+🕵️ Desafio do Caçador de Pistas
+
+O que Ariosto Espinheira pretendia ao ensinar Geografia pelo rádio?
+`,
+options:[
+"Ajudar os estudantes a conhecerem melhor as diferentes regiões do Brasil.",
+"Ensinar apenas a localização das capitais.",
+"Divulgar notícias sobre as cidades brasileiras.",
+"Incentivar viagens entre os estados."
+],
+correct:0
+},
+
+{
+text:`
+📻 Frequência 4 – A imaginação pelo rádio
+
+As transmissões educativas utilizavam diferentes recursos sonoros
+para tornar as aulas mais interessantes.
+
+Fonte histórica
+
+"...utilizava recursos de sonoplastia [...] capazes de estimular
+a imaginação do ouvinte."
+
+COELHO, 2016, p.162.
+
+O que essa estratégia permitiu ao programa de rádio?
+`,
+options:[
+"Aproximar os ouvintes das histórias por meio da imaginação.",
+"Ensinar apenas por imagens.",
+"Substituir os professores.",
+"Divulgar propagandas comerciais."
+],
+
+
         correct:0
       }
     ]
@@ -296,7 +393,8 @@ async initSave() {
         "Excelente! 1923 marcou o início da jornada educacional de Roquette-Pinto.",
         "Correto! O rádio seria capaz de alcançar milhares de brasileiros.",
         "Muito bem! A Rádio Sociedade tornou-se um marco da educação pelo rádio.",
-        "Excelente! Educação e ciência eram prioridades das transmissões."
+        "Excelente! Educação e ciência eram prioridades das transmissões.",
+        "Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes."
       ];
 
       alert(messages[this.currentQuestionIndex]);
@@ -311,7 +409,7 @@ async initSave() {
       }
     } else {
       this.audio.playWrong();
-      alert("Essa pista não parece correta. Observe melhor os objetos ao redor.");
+      alert("Humm... A frequêcia ficou instável! Releia a fonte e tente novamente.");
       this.player.walkTo(20, null);
     }
     this.updateHUD();
