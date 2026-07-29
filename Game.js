@@ -392,6 +392,10 @@ async initSave() {
       const messages = [
 
         "Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes."
+        "Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes."
+        "Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes."
+        "Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes."
+        "Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes."
       ];
 
       alert(messages[this.currentQuestionIndex]);
