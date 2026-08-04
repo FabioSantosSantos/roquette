@@ -221,7 +221,113 @@ options:[
 
         correct:1
       }
-    ]
+    
+,
+{
+text:`
+📖 CAPÍTULO 3
+
+📻 Frequência 1 – Movimento de Educação de Base (MEB)
+
+"O Movimento de Educação de Base (MEB) tinha como objetivo ensinar jovens e adultos que moravam no campo ou em lugares afastados, promovendo a alfabetização e a formação cidadã."
+
+Fonte: MACIEL, Rogério Andrade; CASTRO, Cesar Augusto (2016).
+
+Por que o MEB utilizava o rádio?
+`,
+options:[
+"Para levar educação a pessoas que viviam longe das escolas.",
+"Para transmitir apenas músicas.",
+"Para substituir os professores.",
+"Para divulgar propagandas."
+],
+correct:0
+},
+
+{
+text:`
+📻 Frequência 2 – Cartas
+
+📖 Fonte 16 – Pesquisa acadêmica
+
+"As cartas facilitavam a comunicação entre professores e alunos que moravam distantes."
+
+Fonte: Adaptado de ALVES, Kelly Ludkiewicz. Entre as cartas e o rádio. Salvador: EDUFBA, 2022.
+
+O que as cartas permitiam nas escolas radiofônicas?
+`,
+options:[
+"A comunicação entre professores e estudantes.",
+"A compra de aparelhos de rádio.",
+"A transmissão das aulas.",
+"A divulgação de notícias."
+],
+correct:0
+},
+
+{
+text:`
+📻 Frequência 3 – Projeto Minerva
+
+📖 Fonte 18 – Pesquisa acadêmica
+
+"O Projeto Minerva utilizava o rádio para ensinar trabalhadores que viviam em regiões remotas."
+
+Fonte: ARGÔLO, Idália M. T. (2010).
+
+O que essa iniciativa revela sobre o uso do rádio?
+`,
+options:[
+"O rádio podia ampliar o acesso à educação em diferentes regiões.",
+"O rádio era usado apenas nas capitais.",
+"O rádio servia somente ao entretenimento.",
+"O rádio substituía todas as escolas."
+],
+correct:0
+},
+
+{
+text:`
+📻 Frequência 4 – Ginásio do Ar
+
+📖 Fonte 20 – Pesquisa acadêmica
+
+"O Ginásio do Ar oferecia aulas pelo rádio para quem desejava concluir os estudos do ensino fundamental."
+
+Fonte: ARGÔLO, Idália M. T. (2010).
+
+Quem era o principal público do Ginásio do Ar?
+`,
+options:[
+"Pessoas que queriam concluir os estudos.",
+"Apenas crianças do ensino infantil.",
+"Professores universitários.",
+"Somente radialistas."
+],
+correct:0
+},
+
+{
+text:`
+📻 Frequência 5 – IRDEB
+
+📖 Fonte 21 – Pesquisa acadêmica
+
+"O IRDEB passou a produzir programas educativos para o rádio, contribuindo para a formação de milhares de pessoas na Bahia."
+
+Fonte: ARGÔLO, Idália M. T. (2010).
+
+Qual foi uma das contribuições do IRDEB?
+`,
+options:[
+"Produzir programas educativos para ampliar o acesso ao conhecimento.",
+"Fabricar aparelhos de rádio.",
+"Criar emissoras comerciais.",
+"Produzir apenas programas musicais."
+],
+correct:0
+}
+]
 
     this.audio = new AudioSystem();
 
