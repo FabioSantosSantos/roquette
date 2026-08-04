@@ -507,6 +507,11 @@ async initSave() {
 		"Muito bem! Mais uma memória foi recuperada. Continue sintonizando a História.",
 		"Demais! Toda investigação exige atenção às evidências. Você foi no alvo.",
 		"Que pontaria! Posicionou o dial corretamente.",
+		"Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes.", 
+	    "Excelente! você tem feito bom uso das fontes históricas.",
+	    "Você acertou de novo! Exceente sacada.",
+		"Boa observação! Um verdadeiro caçador de pistas sabe interpretar as fontes históricas.",
+		"Muito bem! Mais uma memória foi recuperada. Continue sintonizando a História.",
 		"Parabéns! Você demonstrou atenção às fontes e mostra que sabe tudo sobre a educação via rádio no Brasil."
       ];
 
