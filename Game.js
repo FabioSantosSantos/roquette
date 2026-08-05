@@ -13,7 +13,8 @@ class Game {
     
     this.questions = [
 {
-text: `📻 Frequência 1 – O início de uma grande ideia
+text: `
+Frequência 1 – O início de uma grande ideia
 Umas das memórias perdidas foi encontrada. Analise a primeira fonte histórica. Ela contém uma pista sobre a origem de uma das maiores revoluções da comunicação.
 "A ideia consiste em levar música aos lares por meio da transmissão sem fios."
 Fonte: SARNOFF apud OLIVEIRA (2011, p.23). Em: OLIVEIRA.
@@ -31,7 +32,7 @@ correct:0
 
 {
 text:`
-📻 Frequência 2
+Frequência 2 - Um evento histórico
 "No dia 7 de setembro de 1922, durante a comemoração do centenário da Independência,
 brasileiros ouviram pela primeira vez uma transmissão de rádio..."
 Fonte: BRASIL. Ministério das Comunicações.
@@ -54,7 +55,7 @@ correct:2
 
 {
 text:`
-📻 Frequência 3 – Novas conexões
+Frequência 3 – Novas conexões
 
 Uma nova memória foi restaurada.
 Analise a fonte histórica e descubra o que impulsionou
@@ -80,14 +81,13 @@ correct:0
 
 {
 text:`
-📻 Frequência 4 – Sintonizando 1926
+Frequência 4 – Sintonizando 1926
 
-Você acaba de desembarcar em 1926.
-Uma vitrine exibe um grande anúncio da Philips.
-As pessoas param para observá-lo com curiosidade.
-
+Você acaba de desembarcar em 1926. Uma vitrine exibe um grande anúncio da "Philips".
+As pessoas param para observá-lo com curiosidade. 
+Fonte: Revista ELECTRON, disponível em Fundação Oswaldo Cruz. 
 Se você fosse um morador daquela época,
-qual mensagem esse anúncio provavelmente transmitiria?
+qual mensagem esse anúncio provavelmente lhe transmitiria?
 `,
 options:[
 "Ter um rádio aproxima sua casa das novidades, da música e das informações.",
@@ -100,10 +100,10 @@ correct:0
 
 {
 text:`
-📻 Frequência 5
+Frequência 5 - A popularização do rádio
 
 Se empresas passaram a fabricar e vender aparelhos de rádio no Brasil,
-o que isso indica?
+o que isso indicava?
 `,
 options:[
 "O rádio estava se tornando cada vez mais popular.",
@@ -115,46 +115,36 @@ correct:0
 },
 {
 text:`
-📖 CAPÍTULO 2
 
-📻 Frequência 1 – A missão educativa de Roquette-Pinto
+Frequência 6 – A missão educativa de Roquette-Pinto
 
 Em 1923, o educador Edgar Roquette-Pinto criou a Rádio Sociedade do Rio de Janeiro,
 acreditando que o rádio poderia levar educação e cultura a todos.
-
-Fonte histórica
-
+Fonte:
 "[...] A rádio foi projetada para ser uma verdadeira 'escola' [...]
 Foi idealizada para ser, nas palavras de Roquette,
 'o livro dos que não sabiam ler'."
-
 LIMA, Nísia Trindade; SÁ, Dominichi Miranda de.
 Roquette-Pinto: ciência e humanismo no Brasil do século XX.
 ANPUH, 2005, p. 8.
-
-Ao chamar o rádio de "o livro dos que não sabiam ler",
-o que Roquette-Pinto queria destacar?
+Ao chamar o rádio de "o livro dos que não sabiam ler", o que Roquette-Pinto queria destacar?
 `,
 options:[
 "Que o rádio transmitia apenas aulas de alfabetização.",
 "Que o rádio substituiria os livros.",
 "Que apenas as escolas poderiam usar o rádio.",
 "Que o rádio poderia levar conhecimento também às pessoas que não sabiam ler."
-
 ],
 correct:3
 },
 
 {
 text:`
-📻 Frequência 2 – A criação da Rádio Sociedade
+Frequência 7 – A criação da Rádio Sociedade
 
-Fonte histórica
-
+Fonte:
 "Roquette-Pinto foi o principal idealizador da Rádio Sociedade do Rio de Janeiro."
-
 MOREIRA; MASSARANI, 2001.
-
 Qual era o principal objetivo de Roquette-Pinto ao criar a Rádio Sociedade?
 `,
 options:[
@@ -168,22 +158,16 @@ correct:1
 
 {
 text:`
-📻 Frequência 3 – Ariosto Espinheira
+Frequência 8 – Ariosto Espinheira
 
 Uma nova memória foi encontrada.
 Ariosto Espinheira transformou o rádio em uma verdadeira sala de aula sobre o Brasil.
-
-Fonte histórica
-
+Fonte:
 "O Brasil foi apresentado aos estudantes de forma inédita:
-como um país dividido em cinco regiões segundo suas características naturais."
-
-ESPINHEIRA, 1938, p.42,
+como um país dividido em cinco regiões segundo suas características naturais." ESPINHEIRA, 1938, p.42,
 apud COELHO, 2016.
 
-🕵️ Desafio do Caçador de Pistas
-
-O que Ariosto Espinheira pretendia ao ensinar Geografia pelo rádio?
+Desafio do Caçador de Pistas: O que Ariosto Espinheira pretendia ao ensinar Geografia pelo rádio?
 `,
 options:[
 ,
@@ -197,18 +181,12 @@ correct:3
 
 {
 text:`
-📻 Frequência 4 – A imaginação pelo rádio
+Frequência 9 – História pelo Rádio
 
 As transmissões educativas utilizavam diferentes recursos sonoros
 para tornar as aulas mais interessantes.
-
-Fonte histórica
-
-"...utilizava recursos de sonoplastia [...] capazes de estimular
-a imaginação do ouvinte."
-
+Fonte:"...utilizava recursos de sonoplastia [...] capazes de estimular a imaginação do ouvinte."
 COELHO, 2016, p.162.
-
 O que essa estratégia permitiu ao programa de rádio?
 `,
 options:[
@@ -225,107 +203,87 @@ options:[
 ,
 {
 text:`
-📖 CAPÍTULO 3
-
-📻 Frequência 1 – Movimento de Educação de Base (MEB)
+Frequência 10 – Movimento de Educação de Base (MEB)
 
 "O Movimento de Educação de Base (MEB) tinha como objetivo ensinar jovens e adultos que moravam no campo ou em lugares afastados, promovendo a alfabetização e a formação cidadã."
-
 Fonte: MACIEL, Rogério Andrade; CASTRO, Cesar Augusto (2016).
-
 Por que o MEB utilizava o rádio?
 `,
 options:[
-"Para levar educação a pessoas que viviam longe das escolas.",
 "Para transmitir apenas músicas.",
 "Para substituir os professores.",
-"Para divulgar propagandas."
+"Para divulgar propagandas.",
+"Para levar educação a pessoas que viviam longe das escolas."
 ],
-correct:0
+correct:3
 },
 
 {
 text:`
-📻 Frequência 2 – Cartas
-
-📖 Fonte 16 – Pesquisa acadêmica
+Frequência 11 – Cartas
 
 "As cartas facilitavam a comunicação entre professores e alunos que moravam distantes."
-
 Fonte: Adaptado de ALVES, Kelly Ludkiewicz. Entre as cartas e o rádio. Salvador: EDUFBA, 2022.
-
 O que as cartas permitiam nas escolas radiofônicas?
 `,
 options:[
-"A comunicação entre professores e estudantes.",
 "A compra de aparelhos de rádio.",
 "A transmissão das aulas.",
+"A comunicação entre professoras e estudantes.",
 "A divulgação de notícias."
 ],
-correct:0
+correct:2
 },
 
 {
 text:`
-📻 Frequência 3 – Projeto Minerva
-
-📖 Fonte 18 – Pesquisa acadêmica
+Frequência 12 – Projeto Minerva
 
 "O Projeto Minerva utilizava o rádio para ensinar trabalhadores que viviam em regiões remotas."
-
 Fonte: ARGÔLO, Idália M. T. (2010).
-
 O que essa iniciativa revela sobre o uso do rádio?
 `,
 options:[
-"O rádio podia ampliar o acesso à educação em diferentes regiões.",
 "O rádio era usado apenas nas capitais.",
 "O rádio servia somente ao entretenimento.",
-"O rádio substituía todas as escolas."
+"O rádio substituía todas as escolas.",
+"O rádio podia ampliar o acesso à educação em diferentes regiões."
 ],
-correct:0
+correct:3
 },
 
 {
 text:`
-📻 Frequência 4 – Ginásio do Ar
-
-📖 Fonte 20 – Pesquisa acadêmica
+Frequência 13 – Ginásio do Ar
 
 "O Ginásio do Ar oferecia aulas pelo rádio para quem desejava concluir os estudos do ensino fundamental."
-
 Fonte: ARGÔLO, Idália M. T. (2010).
-
 Quem era o principal público do Ginásio do Ar?
 `,
 options:[
-"Pessoas que queriam concluir os estudos.",
 "Apenas crianças do ensino infantil.",
+"Pessoas que queriam concluir os estudos.",
 "Professores universitários.",
 "Somente radialistas."
 ],
-correct:0
+correct:1
 },
 
 {
 text:`
-📻 Frequência 5 – IRDEB
-
-📖 Fonte 21 – Pesquisa acadêmica
+Frequência 14 – IRDEB
 
 "O IRDEB passou a produzir programas educativos para o rádio, contribuindo para a formação de milhares de pessoas na Bahia."
-
 Fonte: ARGÔLO, Idália M. T. (2010).
-
 Qual foi uma das contribuições do IRDEB?
 `,
 options:[
-"Produzir programas educativos para ampliar o acesso ao conhecimento.",
 "Fabricar aparelhos de rádio.",
 "Criar emissoras comerciais.",
-"Produzir apenas programas musicais."
+"Produzir apenas programas musicais.",
+"Produzir programas educativos para ampliar o acesso ao conhecimento."
 ],
-correct:0
+correct:3
 }
 ]
 
@@ -500,16 +458,16 @@ async initSave() {
 
       const messages = [
         "Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes.", 
-	    "Excelente! você tem feito bom uso das fontes históricas.",
-	    "Você acertou de novo! Exceente sacada.",
-		"Excelente investigação! Você encontrou a evidência certa e recuperou mais um fragmento da história.",
-		"Boa observação! Um verdadeiro caçador de pistas sabe interpretar as fontes históricas.",
+	    "Excelente! Você tem feito bom uso das fontes históricas.",
+	    "Você acertou de novo! Excelente sacada.",
+		"Que investigação! Você encontrou a evidência certa e recuperou mais um fragmento da História.",
+		"Boa observação! Um verdadeiro caçador de pistas sabe interpretar as fontes Históricas.",
 		"Muito bem! Mais uma memória foi recuperada. Continue sintonizando a História.",
 		"Demais! Toda investigação exige atenção às evidências. Você foi no alvo.",
-		"Que pontaria! Posicionou o dial corretamente.",
+		"Que maravilha! Você posicionou o dial bem na frequência certa.",
 		"Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes.", 
-	    "Excelente! você tem feito bom uso das fontes históricas.",
-	    "Você acertou de novo! Exceente sacada.",
+	    "Excelente! Você tem feito bom uso das fontes históricas.",
+	    "Você acertou de novo! Boa sacada.",
 		"Boa observação! Um verdadeiro caçador de pistas sabe interpretar as fontes históricas.",
 		"Muito bem! Mais uma memória foi recuperada. Continue sintonizando a História.",
 		"Parabéns! Você demonstrou atenção às fontes e mostra que sabe tudo sobre a educação via rádio no Brasil."
