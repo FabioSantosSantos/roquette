@@ -33,16 +33,14 @@ correct:0
 {
 text:`
 Frequência 2 - Um evento histórico
-"No dia 7 de setembro de 1922, durante a comemoração do centenário da Independência,
-brasileiros ouviram pela primeira vez uma transmissão de rádio..."
+"No dia 7 de setembro de 1922, brasileiros ouviram pela primeira vez uma transmissão de rádio..."
 Fonte: BRASIL. Ministério das Comunicações.
 Primeira transmissão oficial, em 1922, marcou o início do rádio no Brasil.
 Publicado em 6 set. 2022.
 Você acabou de chegar ao Rio de Janeiro, em 7 de setembro de 1922.
 Ao ligar um rádio experimental, você ouve um discurso que ficará marcado
 na história do Brasil.
-Descubra qual acontecimento histórico estava sendo celebrado durante
-essa primeira transmissão oficial de rádio.
+Descubra qual acontecimento histórico estava sendo celebrado durante essa primeira transmissão oficial de rádio.
 `,
 options:[
 "A Proclamação da República.",
@@ -81,7 +79,7 @@ correct:0
 
 {
 text:`
-Frequência 4 – Sintonizando 1926
+Frequência 4 - Sintonizando 1926
 
 Você acaba de desembarcar em 1926. Uma vitrine exibe um grande anúncio da "Philips".
 As pessoas param para observá-lo com curiosidade. 
@@ -102,11 +100,10 @@ correct:0
 text:`
 Frequência 5 - A popularização do rádio
 
-Se empresas passaram a fabricar e vender aparelhos de rádio no Brasil,
-o que isso indicava?
+Se empresas passaram a fabricar e vender aparelhos de rádio no Brasil, o que isso indicava?
 `,
 options:[
-"O rádio estava se tornando cada vez mais popular.",
+"O rádio estava se tornando cada vez mais utilizado.",
 "O rádio deixava de ser utilizado.",
 "O rádio era usado apenas por cientistas.",
 "O rádio só funcionava em outros países."
@@ -166,11 +163,9 @@ Fonte:
 "O Brasil foi apresentado aos estudantes de forma inédita:
 como um país dividido em cinco regiões segundo suas características naturais." ESPINHEIRA, 1938, p.42,
 apud COELHO, 2016.
-
 Desafio do Caçador de Pistas: O que Ariosto Espinheira pretendia ao ensinar Geografia pelo rádio?
 `,
 options:[
-,
 "Ensinar apenas a localização das capitais.",
 "Divulgar notícias sobre as cidades brasileiras.",
 "Incentivar viagens entre os estados.",
@@ -313,6 +308,10 @@ async initSave() {
       this.logicalWidth = r.width;
       this.logicalHeight = r.height;
       this.layoutScene();
+      requestAnimationFrame(() => {
+        const box = document.getElementById('questionDisplay');
+        if (box) window.dispatchEvent(new Event('questionBoxResize'));
+      });
     };
     window.addEventListener('resize', fit);
     if (typeof ResizeObserver !== 'undefined') new ResizeObserver(fit).observe(this.canvas);
@@ -354,7 +353,178 @@ async initSave() {
 
     const q = this.questions[index];
 
-    document.getElementById('questionDisplay').innerHTML = q.text;
+    // Exibe o contexto e a fonte histórica com fonte menor,
+    // deixando a pergunta em destaque e evitando a barra de rolagem.
+    const questionDisplay = document.getElementById('questionDisplay');
+    const rawText = q.text.trim();
+
+    // ============================================================
+    // Estrutura da caixa:
+    //   1. Contexto
+    //   2. Fonte histórica (menor + itálico)
+    //   3. Pergunta (maior + negrito)
+    //
+    // A separação NÃO usa pontuação, porque referências bibliográficas
+    // podem conter "." (p.23, 2011 etc.) e isso fazia algumas perguntas
+    // desaparecerem.
+    // ============================================================
+
+    // A pergunta é sempre a última parte interrogativa do texto.
+    // Usamos o último "?" e procuramos o início da linha/segmento da pergunta.
+    // Isso evita que pontos de referências bibliográficas (p.23, 2011 etc.)
+    // sejam confundidos com o fim da pergunta.
+    const questionMark = rawText.lastIndexOf('?');
+    let questionStart = -1;
+
+    if (questionMark >= 0) {
+      const beforeQuestion = rawText.slice(0, questionMark + 1);
+
+      // Procuramos, de trás para frente, uma linha que tenha um marcador
+      // natural de pergunta. A lista cobre as formulações presentes no jogo.
+      const lines = beforeQuestion.split(/\r?\n/);
+      const starters = /^(Ao ler|De acordo com|Se você|Se empresas|Ao chamar|Qual\b|Quem\b|Por que\b|O que\b|Desafio\b|Você acabou|Descubra\b|Qual era\b|Qual foi\b|Quem era\b)/i;
+
+      let accumulated = 0;
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (starters.test(line)) {
+          questionStart = accumulated + lines[i].search(/\S/);
+        }
+        accumulated += lines[i].length + 1;
+      }
+
+      // Fallback seguro: a última linha antes do ?.
+      if (questionStart < 0) {
+        const lastNewline = beforeQuestion.lastIndexOf('\n');
+        questionStart = lastNewline >= 0 ? lastNewline + 1 : 0;
+      }
+    } else {
+      questionStart = rawText.lastIndexOf('\n') + 1;
+    }
+
+    const contextText = rawText.slice(0, questionStart).trim();
+    const questionText = rawText.slice(questionStart).trim();
+
+    // A fonte começa em "Fonte:" e vai até imediatamente antes da pergunta.
+    // Assim fontes com várias linhas também são preservadas corretamente.
+    const sourceMatch = contextText.match(/(?:^|\r?\n)\s*(Fonte:)/i);
+
+    let contextOnly = contextText;
+    let sourceText = '';
+
+    if (sourceMatch) {
+      const sourceStart = sourceMatch.index + sourceMatch[0].search(/Fonte:/i);
+      contextOnly = contextText.slice(0, sourceStart).trim();
+      sourceText = contextText.slice(sourceStart).trim();
+    }
+
+    questionDisplay.innerHTML = `
+      ${contextOnly ? `<div class="historical-context">${contextOnly}</div>` : ''}
+      ${sourceText ? `<div class="historical-source"><em>${sourceText}</em></div>` : ''}
+      <div class="historical-question">${questionText}</div>
+    `;
+
+    // ============================================================
+    // Caixa: usa toda a largura disponível, quebra linhas normalmente
+    // e nunca cria barra de rolagem horizontal ou vertical.
+    // ============================================================
+    Object.assign(questionDisplay.style, {
+      overflow: 'hidden',
+      overflowY: 'hidden',
+      overflowX: 'hidden',
+      boxSizing: 'border-box',
+      width: '100%',
+      maxWidth: 'none',
+      lineHeight: '1.2',
+      whiteSpace: 'normal',
+      wordBreak: 'normal',
+      overflowWrap: 'anywhere'
+    });
+
+    const contextElement = questionDisplay.querySelector('.historical-context');
+    const sourceElement = questionDisplay.querySelector('.historical-source');
+    const questionElement = questionDisplay.querySelector('.historical-question');
+
+    if (contextElement) {
+      Object.assign(contextElement.style, {
+        fontSize: 'clamp(16px, 1.6vw, 22px)',
+        lineHeight: '1.2',
+        fontWeight: '400',
+        margin: '0 0 5px 0',
+        width: '100%',
+        maxWidth: '100%',
+        whiteSpace: 'normal',
+        overflowWrap: 'normal'
+      });
+    }
+
+    if (sourceElement) {
+      Object.assign(sourceElement.style, {
+        fontSize: 'clamp(11px, 1vw, 14px)',
+        lineHeight: '1.1',
+        fontWeight: '400',
+        fontStyle: 'italic',
+        margin: '0 0 7px 0',
+        width: '100%',
+        maxWidth: '100%',
+        whiteSpace: 'normal',
+        overflowWrap: 'normal'
+      });
+    }
+
+    Object.assign(questionElement.style, {
+      fontSize: 'clamp(22px, 2.2vw, 32px)',
+      lineHeight: '1.2',
+      fontWeight: '700',
+      margin: '0',
+      width: '100%',
+      maxWidth: '100%',
+      whiteSpace: 'normal',
+      overflowWrap: 'normal'
+    });
+
+    // ============================================================
+    // Ajuste automático:
+    // Primeiro aproveita toda a largura disponível.
+    // Se ainda não couber verticalmente, reduz gradualmente as fontes.
+    // A pergunta continua sempre maior e em negrito.
+    // ============================================================
+    const fitQuestionBox = () => {
+      if (!questionElement) return;
+
+      let attempts = 0;
+
+      while (
+        questionDisplay.scrollHeight > questionDisplay.clientHeight &&
+        attempts < 40
+      ) {
+        const qSize = parseFloat(getComputedStyle(questionElement).fontSize);
+
+        if (qSize > 19) {
+          questionElement.style.fontSize = `${qSize - 0.25}px`;
+        }
+
+        if (contextElement) {
+          const cSize = parseFloat(getComputedStyle(contextElement).fontSize);
+          if (cSize > 14) {
+            contextElement.style.fontSize = `${cSize - 0.2}px`;
+          }
+        }
+
+        if (sourceElement) {
+          const sSize = parseFloat(getComputedStyle(sourceElement).fontSize);
+          if (sSize > 10) {
+            sourceElement.style.fontSize = `${sSize - 0.15}px`;
+          }
+        }
+
+        attempts++;
+      }
+    };
+
+    requestAnimationFrame(() => {
+      fitQuestionBox();
+    });
 
     this.entities = this.entities.filter(e => !(e instanceof Moringa));
     this.moringas = [];
@@ -461,7 +631,7 @@ async initSave() {
 	    "Excelente! Você tem feito bom uso das fontes históricas.",
 	    "Você acertou de novo! Excelente sacada.",
 		"Que investigação! Você encontrou a evidência certa e recuperou mais um fragmento da História.",
-		"Boa observação! Um verdadeiro caçador de pistas sabe interpretar as fontes Históricas.",
+		"Boa observação! Um verdadeiro caçador também faz inferência.",
 		"Muito bem! Mais uma memória foi recuperada. Continue sintonizando a História.",
 		"Demais! Toda investigação exige atenção às evidências. Você foi no alvo.",
 		"Que maravilha! Você posicionou o dial bem na frequência certa.",
