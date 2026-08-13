@@ -271,6 +271,33 @@ button:hover{
 
 
 
+
+/* ==========================================================
+   HISTORICAL TEXT HIERARCHY
+   Desktop keeps the original box geometry; only text hierarchy
+   is defined here.
+========================================================== */
+
+#questionDisplay .historical-context {
+    font-size: 20px;
+    line-height: 1.35;
+    font-weight: 400;
+    margin: 0 0 5px 0;
+}
+
+#questionDisplay .historical-source {
+    font-size: 14px;
+    line-height: 1.2;
+    font-style: italic;
+    margin: 0 0 7px 0;
+}
+
+#questionDisplay .historical-question {
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 700;
+}
+
 /* ==========================================================
    RESPONSIVE DESKTOP + SMARTPHONE
 ========================================================== */
@@ -348,7 +375,7 @@ button:hover{
 
 @media (max-width: 768px) and (orientation: landscape) {
   #hud { padding: 4px 7px; gap: 3px; }
-  #questionDisplay { height: 100px; min-height: 100px; }
+  #questionDisplay { min-height: 96px !important; }
   .historical-context { font-size: 10px !important; }
   .historical-source { font-size: 8px !important; }
   .historical-question { font-size: 14px !important; }

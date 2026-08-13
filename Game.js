@@ -297,25 +297,39 @@ async initSave() {
   };
 }
   setupResize() {
-    const fit = () => {
+    this.resizeCanvas = () => {
       const dpr = window.devicePixelRatio || 1;
       const r = this.canvas.getBoundingClientRect();
       if (r.width <= 0 || r.height <= 0) return;
-      this.canvas.width  = Math.floor(r.width  * dpr);
+
+      this.canvas.width = Math.floor(r.width * dpr);
       this.canvas.height = Math.floor(r.height * dpr);
+
       this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       this.ctx.scale(dpr, dpr);
+
       this.logicalWidth = r.width;
       this.logicalHeight = r.height;
+
+      // IMPORTANT: after the HUD changes the canvas height, rebuild the
+      // scene using the new logical dimensions. This keeps the answer
+      // cards and the background inside the visible canvas.
       this.layoutScene();
+
       requestAnimationFrame(() => {
         const box = document.getElementById('questionDisplay');
         if (box) window.dispatchEvent(new Event('questionBoxResize'));
       });
     };
-    window.addEventListener('resize', fit);
-    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(fit).observe(this.canvas);
-    fit();
+
+    window.addEventListener('resize', this.resizeCanvas);
+
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(this.resizeCanvas);
+      this.resizeObserver.observe(this.canvas);
+    }
+
+    this.resizeCanvas();
   }
 
   startGame() {
@@ -323,11 +337,23 @@ async initSave() {
     this.score = 0;
     this.currentQuestionIndex = 0;
     this.audio.startBGM();
+
     document.getElementById('startScreen').classList.add('hidden');
     document.getElementById('endScreen').classList.add('hidden');
     document.getElementById('hud').classList.remove('hidden');
+
     this.updateHUD();
-    this.layoutScene();
+
+    // The HUD occupies real layout space only after it is made visible.
+    // Resize on the next frame so the canvas gets its final height before
+    // positioning the player, background and answer cards.
+    requestAnimationFrame(() => {
+      if (this.resizeCanvas) {
+        this.resizeCanvas();
+      } else {
+        this.layoutScene();
+      }
+    });
   }
 
   layoutScene() {
@@ -339,7 +365,9 @@ async initSave() {
 
     if (this.state === 'PLAYING') {
       const mobile = this.logicalWidth <= 768;
-      const playerY = mobile ? Math.max(10, this.logicalHeight - 155) : this.logicalHeight - 150 - 150;
+      const playerY = mobile
+        ? Math.max(10, this.logicalHeight - 115)
+        : Math.max(10, this.logicalHeight - 300);
       this.player = new RoquettePinto(20, playerY);
       this.entities.push(this.player);
 
@@ -427,101 +455,135 @@ async initSave() {
     `;
 
     // ============================================================
-    // Caixa responsiva: no smartphone a altura acompanha a tela e
-    // as fontes são reduzidas progressivamente para evitar corte.
+    // Question box
+    //
+    // Desktop: preserve the original visual proportions from style.css.
+    // Mobile: use a compact box and smaller context/source text.
     // ============================================================
+    const contextElement = questionDisplay.querySelector('.historical-context');
+    const sourceElement = questionDisplay.querySelector('.historical-source');
+    const questionElement = questionDisplay.querySelector('.historical-question');
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-    Object.assign(questionDisplay.style, {
-      overflow: 'hidden',
-      overflowY: 'hidden',
-      overflowX: 'hidden',
-      boxSizing: 'border-box',
-      width: '100%',
-      maxWidth: '100%',
-      lineHeight: isMobile ? '1.15' : '1.2',
-      whiteSpace: 'normal',
-      wordBreak: 'normal',
-      overflowWrap: 'break-word'
-    });
+    const compact = window.innerWidth <= 420;
 
     if (isMobile) {
-      const compact = window.innerWidth <= 420;
       Object.assign(questionDisplay.style, {
-        minHeight: '0',
-        height: compact ? '27dvh' : '29dvh',
-        maxHeight: compact ? '215px' : '250px',
+        overflow: 'hidden',
+        overflowY: 'hidden',
+        overflowX: 'hidden',
+        boxSizing: 'border-box',
+        width: '100%',
+        maxWidth: '100%',
+        lineHeight: '1.15',
+        whiteSpace: 'normal',
+        wordBreak: 'normal',
+        overflowWrap: 'break-word',
+        height: compact ? 'clamp(138px, 27dvh, 215px)' : 'clamp(145px, 29dvh, 250px)',
+        minHeight: compact ? '138px' : '145px',
         padding: compact ? '8px 9px' : '10px 12px'
       });
-    }
 
-    if (contextElement) {
-      Object.assign(contextElement.style, {
-        fontSize: isMobile ? (window.innerWidth <= 420 ? '11px' : '12px') : 'clamp(16px, 1.6vw, 22px)',
-        lineHeight: isMobile ? '1.18' : '1.2',
-        fontWeight: '400',
-        margin: isMobile ? '0 0 4px 0' : '0 0 5px 0',
-        width: '100%',
-        maxWidth: '100%',
-        whiteSpace: 'normal',
-        overflowWrap: 'break-word'
-      });
-    }
-
-    if (sourceElement) {
-      Object.assign(sourceElement.style, {
-        fontSize: isMobile ? (window.innerWidth <= 420 ? '9px' : '10px') : 'clamp(11px, 1vw, 14px)',
-        lineHeight: isMobile ? '1.12' : '1.1',
-        fontWeight: '400',
-        fontStyle: 'italic',
-        margin: isMobile ? '0 0 6px 0' : '0 0 7px 0',
-        width: '100%',
-        maxWidth: '100%',
-        whiteSpace: 'normal',
-        overflowWrap: 'break-word'
-      });
-    }
-
-    Object.assign(questionElement.style, {
-      fontSize: isMobile ? (window.innerWidth <= 420 ? '16px' : '18px') : 'clamp(22px, 2.2vw, 32px)',
-      lineHeight: isMobile ? '1.2' : '1.2',
-      fontWeight: '700',
-      margin: '0',
-      width: '100%',
-      maxWidth: '100%',
-      whiteSpace: 'normal',
-      overflowWrap: 'break-word'
-    });
-
-    const fitQuestionBox = () => {
-      if (!questionElement) return;
-
-      let attempts = 0;
-      const minQuestionSize = isMobile ? 13 : 19;
-      const minContextSize = isMobile ? 8.5 : 14;
-      const minSourceSize = isMobile ? 7.5 : 10;
-
-      while (questionDisplay.scrollHeight > questionDisplay.clientHeight + 1 && attempts < 60) {
-        const qSize = parseFloat(getComputedStyle(questionElement).fontSize);
-        const cSize = contextElement ? parseFloat(getComputedStyle(contextElement).fontSize) : 0;
-        const sSize = sourceElement ? parseFloat(getComputedStyle(sourceElement).fontSize) : 0;
-
-        if (qSize > minQuestionSize) {
-          questionElement.style.fontSize = `${qSize - (isMobile ? 0.4 : 0.25)}px`;
-        } else if (contextElement && cSize > minContextSize) {
-          contextElement.style.fontSize = `${cSize - 0.25}px`;
-        } else if (sourceElement && sSize > minSourceSize) {
-          sourceElement.style.fontSize = `${sSize - 0.15}px`;
-        } else {
-          break;
-        }
-        attempts++;
+      if (contextElement) {
+        Object.assign(contextElement.style, {
+          fontSize: compact ? '11px' : '12px',
+          lineHeight: '1.18',
+          fontWeight: '400',
+          margin: '0 0 4px 0',
+          width: '100%',
+          maxWidth: '100%',
+          whiteSpace: 'normal',
+          overflowWrap: 'break-word'
+        });
       }
-    };
 
-    requestAnimationFrame(() => {
-      fitQuestionBox();
-    });
+      if (sourceElement) {
+        Object.assign(sourceElement.style, {
+          fontSize: compact ? '9px' : '10px',
+          lineHeight: '1.12',
+          fontWeight: '400',
+          fontStyle: 'italic',
+          margin: '0 0 6px 0',
+          width: '100%',
+          maxWidth: '100%',
+          whiteSpace: 'normal',
+          overflowWrap: 'break-word'
+        });
+      }
+
+      Object.assign(questionElement.style, {
+        fontSize: compact ? '16px' : '18px',
+        lineHeight: '1.2',
+        fontWeight: '700',
+        margin: '0',
+        width: '100%',
+        maxWidth: '100%',
+        whiteSpace: 'normal',
+        overflowWrap: 'break-word'
+      });
+
+      const fitQuestionBox = () => {
+        let attempts = 0;
+        while (questionDisplay.scrollHeight > questionDisplay.clientHeight + 1 && attempts < 50) {
+          const qSize = parseFloat(getComputedStyle(questionElement).fontSize);
+          const cSize = contextElement ? parseFloat(getComputedStyle(contextElement).fontSize) : 0;
+          const sSize = sourceElement ? parseFloat(getComputedStyle(sourceElement).fontSize) : 0;
+
+          if (qSize > 13) {
+            questionElement.style.fontSize = `${qSize - 0.35}px`;
+          } else if (contextElement && cSize > 8.5) {
+            contextElement.style.fontSize = `${cSize - 0.2}px`;
+          } else if (sourceElement && sSize > 7.5) {
+            sourceElement.style.fontSize = `${sSize - 0.15}px`;
+          } else {
+            break;
+          }
+          attempts++;
+        }
+      };
+
+      requestAnimationFrame(fitQuestionBox);
+    } else {
+      // Do not inject desktop dimensions from JavaScript.
+      // style.css remains the source of truth for the desktop layout.
+      Object.assign(questionDisplay.style, {
+        overflow: 'hidden',
+        overflowY: 'hidden',
+        overflowX: 'hidden',
+        boxSizing: 'border-box',
+        width: '95%',
+        maxWidth: '1500px',
+        lineHeight: '1.7',
+        whiteSpace: 'normal',
+        wordBreak: 'normal',
+        overflowWrap: 'normal'
+      });
+
+      if (contextElement) {
+        Object.assign(contextElement.style, {
+          fontSize: '20px',
+          lineHeight: '1.35',
+          fontWeight: '400',
+          margin: '0 0 5px 0'
+        });
+      }
+
+      if (sourceElement) {
+        Object.assign(sourceElement.style, {
+          fontSize: '14px',
+          lineHeight: '1.2',
+          fontWeight: '400',
+          fontStyle: 'italic',
+          margin: '0 0 7px 0'
+        });
+      }
+
+      Object.assign(questionElement.style, {
+        fontSize: '24px',
+        lineHeight: '1.35',
+        fontWeight: '700',
+        margin: '0'
+      });
+    }
 
     this.entities = this.entities.filter(e => !(e instanceof Moringa));
     this.moringas = [];
@@ -529,26 +591,34 @@ async initSave() {
     const mobile = this.logicalWidth <= 768;
 
     if (mobile) {
-      // Smartphone/tablet: two columns so the answer cards fit the screen.
+      // Two columns on phones/tablets. Dimensions are calculated from the
+      // actual canvas width, so cards never extend beyond the viewport.
       const columns = 2;
-      const rows = Math.ceil(q.options.length / columns);
-      const margin = 8;
-      const gapX = 6;
+      const marginX = Math.max(6, Math.floor(this.logicalWidth * 0.025));
+      const gapX = 8;
       const gapY = 10;
-      const cardWidth = Math.max(150, Math.floor((this.logicalWidth - margin * 2 - gapX) / 2));
-      const cardHeight = 86;
-      const startY = 12;
+      const cardWidth = Math.max(
+        110,
+        Math.floor((this.logicalWidth - marginX * 2 - gapX) / columns)
+      );
+      const cardHeight = this.logicalWidth <= 420 ? 78 : 84;
+
+      // Keep the answer area visible near the upper/middle part of the
+      // actual canvas. The background remains fully visible behind it.
+      const startY = Math.max(18, Math.floor(this.logicalHeight * 0.08));
 
       q.options.forEach((opt, i) => {
         const col = i % columns;
         const row = Math.floor(i / columns);
-        const x = margin + col * (cardWidth + gapX);
+        const x = marginX + col * (cardWidth + gapX);
         const y = startY + row * (cardHeight + gapY);
+
         const m = new Moringa(x, y, opt, i === q.correct, {
           mobile: true,
           width: cardWidth,
           height: cardHeight
         });
+
         this.moringas.push(m);
         this.entities.push(m);
       });
