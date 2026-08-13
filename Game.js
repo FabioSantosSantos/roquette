@@ -339,7 +339,7 @@ async initSave() {
 
     if (this.state === 'PLAYING') {
       const mobile = this.logicalWidth <= 768;
-      const playerY = Math.max(10, this.logicalHeight - (mobile ? 165 : 300));
+      const playerY = mobile ? Math.max(10, this.logicalHeight - 155) : this.logicalHeight - 150 - 150;
       this.player = new RoquettePinto(20, playerY);
       this.entities.push(this.player);
 
@@ -534,55 +534,44 @@ async initSave() {
     const mobile = this.logicalWidth <= 768;
 
     if (mobile) {
-        // Smartphone/tablet: 2x2 grid, with the radio above each answer.
-        const columns = 2;
-        const rows = Math.ceil(q.options.length / columns);
-        const gapX = 8;
-        const gapY = 8;
-        const outer = 8;
-        const boxWidth = Math.max(110, Math.floor((this.logicalWidth - outer * 2 - gapX * (columns - 1)) / columns));
-        const itemHeight = 82;
-        const gridHeight = rows * itemHeight + (rows - 1) * gapY;
-        const startY = Math.max(8, Math.min(this.logicalHeight - gridHeight - 8, 8));
+      // Smartphone/tablet: two columns so the answer cards fit the screen.
+      const columns = 2;
+      const rows = Math.ceil(q.options.length / columns);
+      const margin = 8;
+      const gapX = 6;
+      const gapY = 10;
+      const cardWidth = Math.max(150, Math.floor((this.logicalWidth - margin * 2 - gapX) / 2));
+      const cardHeight = 86;
+      const startY = 12;
 
-        q.options.forEach((opt, i) => {
-            const col = i % columns;
-            const row = Math.floor(i / columns);
-            const x = outer + col * (boxWidth + gapX);
-            const y = startY + row * (itemHeight + gapY);
-
-            const m = new Moringa(x, y, opt, i === q.correct, {
-                mobile: true,
-                width: boxWidth,
-                height: itemHeight,
-                boxWidth: boxWidth,
-                boxHeight: 42
-            });
-            this.moringas.push(m);
-            this.entities.push(m);
+      q.options.forEach((opt, i) => {
+        const col = i % columns;
+        const row = Math.floor(i / columns);
+        const x = margin + col * (cardWidth + gapX);
+        const y = startY + row * (cardHeight + gapY);
+        const m = new Moringa(x, y, opt, i === q.correct, {
+          mobile: true,
+          width: cardWidth,
+          height: cardHeight
         });
-    } else {
-        // Desktop: original horizontal layout.
-        const leftMargin = 30;
-        const rightMargin = 40;
-        const usableWidth = this.logicalWidth - leftMargin - rightMargin;
-        const spacing = usableWidth / q.options.length;
-
-        q.options.forEach((opt, i) => {
-            const x = leftMargin + i * spacing;
-            const y = this.logicalHeight - 400;
-            const m = new Moringa(x, y, opt, i === q.correct);
-            this.moringas.push(m);
-            this.entities.push(m);
-        });
-    }
-
-    /*
-
         this.moringas.push(m);
         this.entities.push(m);
+      });
+    } else {
+      // Desktop: original horizontal layout.
+      const leftMargin = 30;
+      const rightMargin = 40;
+      const usableWidth = this.logicalWidth - leftMargin - rightMargin;
+      const spacing = usableWidth / q.options.length;
 
-    });
+      q.options.forEach((opt, i) => {
+        const x = leftMargin + i * spacing;
+        const y = this.logicalHeight - 400;
+        const m = new Moringa(x, y, opt, i === q.correct);
+        this.moringas.push(m);
+        this.entities.push(m);
+      });
+    }
 
 }
 
