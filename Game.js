@@ -85,8 +85,7 @@ Você acaba de desembarcar em 1926. Uma vitrine exibe um grande anúncio da "Phi
 As pessoas param para observá-lo com curiosidade. 
 Fonte: Revista ELECTRON, disponível em Fundação Oswaldo Cruz. 
 
-Se você fosse um morador daquela época,
-qual mensagem esse anúncio provavelmente lhe transmitiria?
+Se você fosse um morador daquela época, qual mensagem esse anúncio provavelmente lhe transmitiria?
 `,
 options:[
 "Ter um rádio aproxima sua casa das novidades, da música e das informações.",
