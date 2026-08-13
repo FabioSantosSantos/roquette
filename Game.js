@@ -338,7 +338,9 @@ async initSave() {
     this.entities.push(this.bg);
 
     if (this.state === 'PLAYING') {
-      this.player = new RoquettePinto(20, this.logicalHeight - 150 - 150);
+      const mobile = this.logicalWidth <= 768;
+      const playerY = Math.max(10, this.logicalHeight - (mobile ? 165 : 300));
+      this.player = new RoquettePinto(20, playerY);
       this.entities.push(this.player);
 
       if (this.currentQuestionIndex < this.questions.length) {
@@ -529,31 +531,53 @@ async initSave() {
     this.entities = this.entities.filter(e => !(e instanceof Moringa));
     this.moringas = [];
 
-    // Largura ocupada por cada conjunto (rádio + caixa)
-    const objectWidth = 270;
+    const mobile = this.logicalWidth <= 768;
 
-    // Margens laterais
-    const leftMargin = 30;
-    const rightMargin = 40;
+    if (mobile) {
+        // Smartphone/tablet: 2x2 grid, with the radio above each answer.
+        const columns = 2;
+        const rows = Math.ceil(q.options.length / columns);
+        const gapX = 8;
+        const gapY = 8;
+        const outer = 8;
+        const boxWidth = Math.max(110, Math.floor((this.logicalWidth - outer * 2 - gapX * (columns - 1)) / columns));
+        const itemHeight = 82;
+        const gridHeight = rows * itemHeight + (rows - 1) * gapY;
+        const startY = Math.max(8, Math.min(this.logicalHeight - gridHeight - 8, 8));
 
-    // Área útil
-    const usableWidth = this.logicalWidth - leftMargin - rightMargin;
+        q.options.forEach((opt, i) => {
+            const col = i % columns;
+            const row = Math.floor(i / columns);
+            const x = outer + col * (boxWidth + gapX);
+            const y = startY + row * (itemHeight + gapY);
 
-    // Espaçamento entre centros dos objetos
-    const spacing = usableWidth / q.options.length;
+            const m = new Moringa(x, y, opt, i === q.correct, {
+                mobile: true,
+                width: boxWidth,
+                height: itemHeight,
+                boxWidth: boxWidth,
+                boxHeight: 42
+            });
+            this.moringas.push(m);
+            this.entities.push(m);
+        });
+    } else {
+        // Desktop: original horizontal layout.
+        const leftMargin = 30;
+        const rightMargin = 40;
+        const usableWidth = this.logicalWidth - leftMargin - rightMargin;
+        const spacing = usableWidth / q.options.length;
 
-    q.options.forEach((opt, i) => {
+        q.options.forEach((opt, i) => {
+            const x = leftMargin + i * spacing;
+            const y = this.logicalHeight - 400;
+            const m = new Moringa(x, y, opt, i === q.correct);
+            this.moringas.push(m);
+            this.entities.push(m);
+        });
+    }
 
-        const x = leftMargin + i * spacing;
-
-        const y = this.logicalHeight - 400;
-
-        const m = new Moringa(
-            x,
-            y,
-            opt,
-            i === q.correct
-        );
+    /*
 
         this.moringas.push(m);
         this.entities.push(m);
@@ -605,7 +629,7 @@ async initSave() {
       });
     });
 
-    this.canvas.addEventListener('click', (e) => {
+    const selectAnswer = (e) => {
       if (this.state !== 'PLAYING') return;
       if (this.player && this.player.isMoving) return;
       const rect = this.canvas.getBoundingClientRect();
@@ -614,11 +638,13 @@ async initSave() {
 
       const clickedEntity = this.getObjectAt(x, y);
       if (clickedEntity && clickedEntity instanceof Moringa) {
-        this.player.walkTo(clickedEntity.x - 60, () => {
+        this.player.walkTo(Math.max(0, clickedEntity.x - 60), () => {
           this.handleAnswer(clickedEntity.isCorrect);
         });
       }
-    });
+    };
+
+    this.canvas.addEventListener('pointerdown', selectAnswer, { passive: true });
   }
 
   handleAnswer(isCorrect) {
