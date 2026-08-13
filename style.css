@@ -79,9 +79,9 @@ body{
 
     max-width:1500px;
 
-    min-height:170px;
+    min-height:190px;
 
-    height:170px;
+    height:190px;
 
     overflow-y:auto;
 
@@ -296,6 +296,62 @@ button:hover{
     font-size: 24px;
     line-height: 1.35;
     font-weight: 700;
+}
+
+
+/* ==========================================================
+   LONG QUESTION BOXES
+   Frequencies 3 and 6 contain longer source/context blocks.
+   Reduce only their typography so every line remains visible.
+========================================================== */
+
+@media (min-width: 769px) {
+    #questionDisplay.frequency-3,
+    #questionDisplay.frequency-6 {
+        height: 190px;
+        min-height: 190px;
+        overflow: hidden;
+    }
+
+    #questionDisplay.frequency-3 .historical-context,
+    #questionDisplay.frequency-6 .historical-context {
+        font-size: 16px;
+        line-height: 1.18;
+        margin-bottom: 4px;
+    }
+
+    #questionDisplay.frequency-3 .historical-source,
+    #questionDisplay.frequency-6 .historical-source {
+        font-size: 11px;
+        line-height: 1.08;
+        margin-bottom: 5px;
+    }
+
+    #questionDisplay.frequency-3 .historical-question,
+    #questionDisplay.frequency-6 .historical-question {
+        font-size: 17px;
+        line-height: 1.05;
+    }
+}
+
+@media (max-width: 768px) {
+    #questionDisplay.frequency-3 .historical-context,
+    #questionDisplay.frequency-6 .historical-context {
+        font-size: clamp(10px, 2.8vw, 13px) !important;
+        line-height: 1.1 !important;
+    }
+
+    #questionDisplay.frequency-3 .historical-source,
+    #questionDisplay.frequency-6 .historical-source {
+        font-size: clamp(8px, 2.15vw, 10px) !important;
+        line-height: 1.05 !important;
+    }
+
+    #questionDisplay.frequency-3 .historical-question,
+    #questionDisplay.frequency-6 .historical-question {
+        font-size: clamp(15px, 4.1vw, 18px) !important;
+        line-height: 1.08 !important;
+    }
 }
 
 /* ==========================================================

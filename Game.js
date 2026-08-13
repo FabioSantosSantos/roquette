@@ -454,6 +454,12 @@ async initSave() {
       <div class="historical-question">${questionText}</div>
     `;
 
+    // Mark the two longest question boxes so their typography can be
+    // adjusted without changing the game flow or the other frequencies.
+    questionDisplay.classList.remove('frequency-3', 'frequency-6');
+    if (index === 2) questionDisplay.classList.add('frequency-3');
+    if (index === 5) questionDisplay.classList.add('frequency-6');
+
     // ============================================================
     // Question box
     //
