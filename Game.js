@@ -427,99 +427,94 @@ async initSave() {
     `;
 
     // ============================================================
-    // Caixa: usa toda a largura disponível, quebra linhas normalmente
-    // e nunca cria barra de rolagem horizontal ou vertical.
+    // Caixa responsiva: no smartphone a altura acompanha a tela e
+    // as fontes são reduzidas progressivamente para evitar corte.
     // ============================================================
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
     Object.assign(questionDisplay.style, {
       overflow: 'hidden',
       overflowY: 'hidden',
       overflowX: 'hidden',
       boxSizing: 'border-box',
       width: '100%',
-      maxWidth: 'none',
-      lineHeight: '1.2',
+      maxWidth: '100%',
+      lineHeight: isMobile ? '1.15' : '1.2',
       whiteSpace: 'normal',
       wordBreak: 'normal',
-      overflowWrap: 'anywhere'
+      overflowWrap: 'break-word'
     });
 
-    const contextElement = questionDisplay.querySelector('.historical-context');
-    const sourceElement = questionDisplay.querySelector('.historical-source');
-    const questionElement = questionDisplay.querySelector('.historical-question');
+    if (isMobile) {
+      const compact = window.innerWidth <= 420;
+      Object.assign(questionDisplay.style, {
+        minHeight: '0',
+        height: compact ? '27dvh' : '29dvh',
+        maxHeight: compact ? '215px' : '250px',
+        padding: compact ? '8px 9px' : '10px 12px'
+      });
+    }
 
     if (contextElement) {
       Object.assign(contextElement.style, {
-        fontSize: 'clamp(16px, 1.6vw, 22px)',
-        lineHeight: '1.2',
+        fontSize: isMobile ? (window.innerWidth <= 420 ? '11px' : '12px') : 'clamp(16px, 1.6vw, 22px)',
+        lineHeight: isMobile ? '1.18' : '1.2',
         fontWeight: '400',
-        margin: '0 0 5px 0',
+        margin: isMobile ? '0 0 4px 0' : '0 0 5px 0',
         width: '100%',
         maxWidth: '100%',
         whiteSpace: 'normal',
-        overflowWrap: 'normal'
+        overflowWrap: 'break-word'
       });
     }
 
     if (sourceElement) {
       Object.assign(sourceElement.style, {
-        fontSize: 'clamp(11px, 1vw, 14px)',
-        lineHeight: '1.1',
+        fontSize: isMobile ? (window.innerWidth <= 420 ? '9px' : '10px') : 'clamp(11px, 1vw, 14px)',
+        lineHeight: isMobile ? '1.12' : '1.1',
         fontWeight: '400',
         fontStyle: 'italic',
-        margin: '0 0 7px 0',
+        margin: isMobile ? '0 0 6px 0' : '0 0 7px 0',
         width: '100%',
         maxWidth: '100%',
         whiteSpace: 'normal',
-        overflowWrap: 'normal'
+        overflowWrap: 'break-word'
       });
     }
 
     Object.assign(questionElement.style, {
-      fontSize: 'clamp(22px, 2.2vw, 32px)',
-      lineHeight: '1.2',
+      fontSize: isMobile ? (window.innerWidth <= 420 ? '16px' : '18px') : 'clamp(22px, 2.2vw, 32px)',
+      lineHeight: isMobile ? '1.2' : '1.2',
       fontWeight: '700',
       margin: '0',
       width: '100%',
       maxWidth: '100%',
       whiteSpace: 'normal',
-      overflowWrap: 'normal'
+      overflowWrap: 'break-word'
     });
 
-    // ============================================================
-    // Ajuste automático:
-    // Primeiro aproveita toda a largura disponível.
-    // Se ainda não couber verticalmente, reduz gradualmente as fontes.
-    // A pergunta continua sempre maior e em negrito.
-    // ============================================================
     const fitQuestionBox = () => {
       if (!questionElement) return;
 
       let attempts = 0;
+      const minQuestionSize = isMobile ? 13 : 19;
+      const minContextSize = isMobile ? 8.5 : 14;
+      const minSourceSize = isMobile ? 7.5 : 10;
 
-      while (
-        questionDisplay.scrollHeight > questionDisplay.clientHeight &&
-        attempts < 40
-      ) {
+      while (questionDisplay.scrollHeight > questionDisplay.clientHeight + 1 && attempts < 60) {
         const qSize = parseFloat(getComputedStyle(questionElement).fontSize);
+        const cSize = contextElement ? parseFloat(getComputedStyle(contextElement).fontSize) : 0;
+        const sSize = sourceElement ? parseFloat(getComputedStyle(sourceElement).fontSize) : 0;
 
-        if (qSize > 19) {
-          questionElement.style.fontSize = `${qSize - 0.25}px`;
+        if (qSize > minQuestionSize) {
+          questionElement.style.fontSize = `${qSize - (isMobile ? 0.4 : 0.25)}px`;
+        } else if (contextElement && cSize > minContextSize) {
+          contextElement.style.fontSize = `${cSize - 0.25}px`;
+        } else if (sourceElement && sSize > minSourceSize) {
+          sourceElement.style.fontSize = `${sSize - 0.15}px`;
+        } else {
+          break;
         }
-
-        if (contextElement) {
-          const cSize = parseFloat(getComputedStyle(contextElement).fontSize);
-          if (cSize > 14) {
-            contextElement.style.fontSize = `${cSize - 0.2}px`;
-          }
-        }
-
-        if (sourceElement) {
-          const sSize = parseFloat(getComputedStyle(sourceElement).fontSize);
-          if (sSize > 10) {
-            sourceElement.style.fontSize = `${sSize - 0.15}px`;
-          }
-        }
-
         attempts++;
       }
     };
