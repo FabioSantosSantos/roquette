@@ -84,6 +84,7 @@ Frequência 4 - Sintonizando 1926
 Você acaba de desembarcar em 1926. Uma vitrine exibe um grande anúncio da "Philips".
 As pessoas param para observá-lo com curiosidade. 
 Fonte: Revista ELECTRON, disponível em Fundação Oswaldo Cruz. 
+
 Se você fosse um morador daquela época,
 qual mensagem esse anúncio provavelmente lhe transmitiria?
 `,
