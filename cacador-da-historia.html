@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caçador da História – O Rádio e a Educação</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--wood:#3b2417;--brass:#d9a441;--paper:#f8efd6;--ink:#2a1d12;--ok:#2f9e5b;--bad:#c0392b;--gh:120px;
+--serif:'Playfair Display',Georgia,serif;--body:'Lora',Georgia,serif}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden;background:#1b1230;font-family:var(--body);color:var(--ink)}
+#c{position:fixed;inset:0;width:100%;height:100%}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;gap:10px;padding:max(10px,env(safe-area-inset-top)) 12px calc(var(--gh) + env(safe-area-inset-bottom));pointer-events:none}
+#app>*{pointer-events:auto}.hid{display:none!important}
+#hud{display:flex;align-items:center;gap:12px;background:linear-gradient(#4a2e1c,var(--wood));border:2px solid var(--brass);border-radius:14px;padding:8px 14px;color:#fff;box-shadow:0 6px 18px #0006}
+#hud b{font-family:var(--serif);color:var(--brass);white-space:nowrap}
+#dial{flex:1;height:10px;border-radius:9px;background:#1d110a;position:relative;box-shadow:inset 0 1px 4px #000}
+#bar{height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,#f2c14e,#ff7a3d);transition:width .6s}
+#needle{position:absolute;top:-6px;width:4px;height:22px;background:#ff4b3a;border-radius:2px;left:0;transition:left .6s;box-shadow:0 0 8px #ff4b3a}
+#mute{background:none;border:0;font-size:22px;cursor:pointer}
+#q{background:var(--paper);border:3px solid #8b5a2b;border-radius:14px;padding:14px 20px;max-height:36dvh;overflow:auto;box-shadow:0 8px 22px #0006,inset 0 0 30px #c9a66b55;max-width:1100px;width:100%;margin:0 auto}
+#qt{font:900 clamp(15px,2.2vw,22px) var(--serif);color:#7a3b12;margin-bottom:6px}
+#qc{font-size:clamp(13px,1.6vw,17px);line-height:1.45;white-space:pre-line}
+#qs{font-style:italic;font-size:clamp(11px,1.2vw,13px);opacity:.75;margin:6px 0;white-space:pre-line;border-left:3px solid var(--brass);padding-left:8px}
+#qq{font:700 clamp(15px,1.9vw,20px)/1.35 var(--body);margin-top:6px}
+#cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1100px;width:100%;margin:auto auto 0}
+.card{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;cursor:pointer;font:600 clamp(11px,1.3vw,15px)/1.3 var(--body);color:#fff4d6;padding:10px 10px 12px;border-radius:14px;border:2px solid var(--brass);background:linear-gradient(160deg,#8a5a34,#4a2c18);box-shadow:0 6px 0 #2a170b,0 10px 18px #0007;transition:transform .15s}
+.card:hover{transform:translateY(-4px)}.card:active{transform:translateY(2px)}
+.card i{width:100%;height:34px;border-radius:8px;background:#e9d9a8;border:2px solid #2a170b;position:relative;display:block;background-image:repeating-linear-gradient(90deg,#0002 0 2px,transparent 2px 7px)}
+.card i:before,.card i:after{content:"";position:absolute;top:6px;width:16px;height:16px;border-radius:50%;background:radial-gradient(#f4d27a,#a8741c);border:2px solid #2a170b}
+.card i:before{left:6px}.card i:after{right:6px}
+.card.ok{background:linear-gradient(160deg,#3fc47a,#1f7a45);animation:pop .5s}
+.card.bad{background:linear-gradient(160deg,#d9534f,#7a1f1a);animation:shake .4s;opacity:.7;pointer-events:none}
+@keyframes pop{50%{transform:scale(1.08)}}@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:#120a2099;backdrop-filter:blur(3px);z-index:5}
+.panel{max-width:620px;max-height:92dvh;overflow:auto;background:var(--paper);border:4px solid var(--brass);border-radius:20px;padding:clamp(18px,4vw,34px);text-align:center;box-shadow:0 20px 60px #000a}
+.panel h1{font:900 clamp(26px,5vw,44px) var(--serif);color:#7a3b12;margin-bottom:4px}
+.panel .sub{letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:#a8741c;margin-bottom:14px}
+.panel p{line-height:1.5;margin:10px 0;font-size:clamp(14px,1.8vw,16px)}
+.btn{margin-top:14px;font:700 18px var(--serif);color:#fff;background:linear-gradient(#e0553d,#a52a17);border:2px solid #5a150b;border-radius:40px;padding:12px 34px;cursor:pointer;box-shadow:0 5px 0 #5a150b}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #5a150b}
+#fb{z-index:4;align-items:flex-end}#fb .panel{margin-bottom:calc(var(--gh) + 10px)}
+#st{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:0;background:repeating-linear-gradient(0deg,#fff6 0 2px,#0009 2px 4px)}
+#st.on{animation:st .5s}@keyframes st{30%{opacity:.8}}
+@media(max-width:760px){#cards{grid-template-columns:1fr 1fr;gap:8px}.card i{height:24px}#hud{padding:6px 10px}}
+</style></head><body>
+<canvas id="c"></canvas><div id="st"></div>
+<div id="app" class="hid">
+<div id="hud"><b id="sc">0 pts</b><div id="dial"><div id="bar"></div><div id="needle"></div></div><b id="fr">1/14</b><button id="mute" title="Som">🔊</button></div>
+<div id="q"><div id="qt"></div><div id="qc"></div><div id="qs"></div><div id="qq"></div></div>
+<div id="cards"></div></div>
+<div id="fb" class="ov hid"><div class="panel"><p id="fm" style="font-weight:600"></p><button class="btn" id="fbtn"></button></div></div>
+<div id="start" class="ov"><div class="panel"><div class="sub">📻 Rádio e Educação</div><h1>Caçador da História</h1><p>Bem vindo Caçador da História do rádio! Houve um tempo em que a educação não chegava a todas as pessoas. Nesse período, o rádio tornou-se um importante aliado do ensino, levando conhecimento a diferentes lugares. Neste jogo, você fará uma viagem desde o surgimento do rádio até os dias de hoje, descobrindo como ele marcou a história da educação.</p><p>Cada pergunta respondida corretamente restaura uma frequência perdida da história do rádio. Analise as fontes, descubra as pistas e avance para a próxima sintonia.</p><button class="btn" id="go">Ligar o rádio</button></div></div>
+<div id="end" class="ov hid"><div class="panel"><div class="sub">Fim da transmissão</div><h1>Frequências restauradas!</h1><p id="fin" style="font-size:20px;font-weight:700"></p><p id="stars" style="font-size:34px"></p><button class="btn" id="again">Jogar novamente</button></div></div>
+<script>
+const Q=[
+{
+text: `
+Frequência 1 – O início de uma grande ideia
+Umas das memórias perdidas foi encontrada. Analise a primeira fonte histórica. Ela contém uma pista sobre a origem de uma das maiores revoluções da comunicação.
+"A ideia consiste em levar música aos lares por meio da transmissão sem fios."
+Fonte: SARNOFF apud OLIVEIRA (2011, p.23). Em: OLIVEIRA.
+Ao ler essa fonte, qual inovação ela destaca?
+
+`,
+options:[
+"A possibilidade de transmitir sons e informações sem o uso de fios.",
+"A criação da televisão.",
+"A invenção do telefone celular.",
+"A transmissão de imagens pela internet."
+],
+correct:0
+},
+
+{
+text:`
+Frequência 2 - Um evento histórico
+"No dia 7 de setembro de 1922, brasileiros ouviram pela primeira vez uma transmissão de rádio..."
+Fonte: BRASIL. Ministério das Comunicações.
+Primeira transmissão oficial, em 1922, marcou o início do rádio no Brasil.
+Publicado em 6 set. 2022.
+Você acabou de chegar ao Rio de Janeiro, em 7 de setembro de 1922.
+Ao ligar um rádio experimental, você ouve um discurso que ficará marcado
+na história do Brasil.
+Descubra qual acontecimento histórico estava sendo celebrado durante essa primeira transmissão oficial de rádio.
+`,
+options:[
+"A Proclamação da República.",
+"A inauguração da Rádio Sociedade.",
+"O centenário da Independência do Brasil.",
+"A criação do Ministério das Comunicações."
+],
+correct:2
+},
+
+{
+text:`
+Frequência 3 – Novas conexões
+
+Uma nova memória foi restaurada.
+Analise a fonte histórica e descubra o que impulsionou
+o surgimento do radioamadorismo.
+"Assim, duas foram as motrizes que alavancaram o radioamadorismo:
+a curiosidade técnica e a necessidade de suprir lacunas de comunicação
+entre pontos remotos..."
+Fonte: FRANCO, Carlos Fernando Martins; MENESES, Verônica Dantas.
+Radioamadorismo: comunicação, individualidade, comunidade.
+Anais do XXXVII Congresso Brasileiro de Ciências da Comunicação
+(INTERCOM), 2014.
+De acordo com a fonte, por que o radioamadorismo começou
+a ganhar força no início do século XX?
+`,
+options:[
+"Porque as pessoas buscavam novas formas de comunicação e tinham interesse em experimentar a tecnologia.",
+"Porque já existia internet em todo o país.",
+"Porque o rádio era utilizado apenas para ouvir músicas.",
+"Porque todas as cidades já possuíam sistemas eficientes de telefonia."
+],
+correct:0
+},
+
+{
+text:`
+Frequência 4 - Sintonizando 1926
+
+Você acaba de desembarcar em 1926. Uma vitrine exibe um grande anúncio da "Philips".
+As pessoas param para observá-lo com curiosidade. 
+Fonte: Revista ELECTRON, disponível em Fundação Oswaldo Cruz. 
+
+Se você fosse um morador daquela época, qual mensagem esse anúncio provavelmente lhe transmitiria?
+`,
+options:[
+"Ter um rádio aproxima sua casa das novidades, da música e das informações.",
+"O rádio será substituído em breve por outra tecnologia.",
+"O rádio é um equipamento de uso exclusivo das fábricas.",
+"Somente especialistas podem utilizar um rádio."
+],
+correct:0
+},
+
+{
+text:`
+Frequência 5 - A popularização do rádio
+
+Se empresas passaram a fabricar e vender aparelhos de rádio no Brasil, o que isso indicava?
+`,
+options:[
+"O rádio estava se tornando cada vez mais utilizado.",
+"O rádio deixava de ser utilizado.",
+"O rádio era usado apenas por cientistas.",
+"O rádio só funcionava em outros países."
+],
+correct:0
+},
+{
+text:`
+
+Frequência 6 – A missão educativa de Roquette-Pinto
+
+Em 1923, o educador Edgar Roquette-Pinto criou a Rádio Sociedade do Rio de Janeiro,
+acreditando que o rádio poderia levar educação e cultura a todos.
+Fonte:
+"[...] A rádio foi projetada para ser uma verdadeira 'escola' [...]
+Foi idealizada para ser, nas palavras de Roquette,
+'o livro dos que não sabiam ler'."
+LIMA, Nísia Trindade; SÁ, Dominichi Miranda de.
+Roquette-Pinto: ciência e humanismo no Brasil do século XX.
+ANPUH, 2005, p. 8.
+Ao chamar o rádio de "o livro dos que não sabiam ler", o que Roquette-Pinto queria destacar?
+`,
+options:[
+"Que o rádio transmitia apenas aulas de alfabetização.",
+"Que o rádio substituiria os livros.",
+"Que apenas as escolas poderiam usar o rádio.",
+"Que o rádio poderia levar conhecimento também às pessoas que não sabiam ler."
+],
+correct:3
+},
+
+{
+text:`
+Frequência 7 – A criação da Rádio Sociedade
+
+Fonte:
+"Roquette-Pinto foi o principal idealizador da Rádio Sociedade do Rio de Janeiro."
+MOREIRA; MASSARANI, 2001.
+Qual era o principal objetivo de Roquette-Pinto ao criar a Rádio Sociedade?
+`,
+options:[
+"Promover apenas programas musicais.",
+"Difundir educação, ciência e cultura para a população.",
+"Vender aparelhos de rádio.",
+"Transmitir propagandas comerciais."
+],
+correct:1
+},
+
+{
+text:`
+Frequência 8 – Ariosto Espinheira
+
+Uma nova memória foi encontrada.
+Ariosto Espinheira transformou o rádio em uma verdadeira sala de aula sobre o Brasil.
+Fonte:
+"O Brasil foi apresentado aos estudantes de forma inédita:
+como um país dividido em cinco regiões segundo suas características naturais." ESPINHEIRA, 1938, p.42,
+apud COELHO, 2016.
+Desafio do Caçador de Pistas: O que Ariosto Espinheira pretendia ao ensinar Geografia pelo rádio?
+`,
+options:[
+"Ensinar apenas a localização das capitais.",
+"Divulgar notícias sobre as cidades brasileiras.",
+"Incentivar viagens entre os estados.",
+"Ajudar os estudantes a conhecerem melhor as diferentes regiões do Brasil."
+],
+correct:3
+},
+
+{
+text:`
+Frequência 9 – História pelo Rádio
+
+As transmissões educativas utilizavam diferentes recursos sonoros
+para tornar as aulas mais interessantes.
+Fonte:"...utilizava recursos de sonoplastia [...] capazes de estimular a imaginação do ouvinte."
+COELHO, 2016, p.162.
+O que essa estratégia permitiu ao programa de rádio?
+`,
+options:[
+"Ensinar apenas por imagens.",
+"Aproximar os ouvintes das histórias por meio da imaginação.",
+"Substituir os professores.",
+"Divulgar propagandas comerciais."
+],
+
+
+        correct:1
+      }
+    
+,
+{
+text:`
+Frequência 10 – Movimento de Educação de Base (MEB)
+
+"O Movimento de Educação de Base (MEB) tinha como objetivo ensinar jovens e adultos que moravam no campo ou em lugares afastados, promovendo a alfabetização e a formação cidadã."
+Fonte: MACIEL, Rogério Andrade; CASTRO, Cesar Augusto (2016).
+Por que o MEB utilizava o rádio?
+`,
+options:[
+"Para transmitir apenas músicas.",
+"Para substituir os professores.",
+"Para divulgar propagandas.",
+"Para levar educação a pessoas que viviam longe das escolas."
+],
+correct:3
+},
+
+{
+text:`
+Frequência 11 – Cartas
+
+"As cartas facilitavam a comunicação entre professores e alunos que moravam distantes."
+Fonte: Adaptado de ALVES, Kelly Ludkiewicz. Entre as cartas e o rádio. Salvador: EDUFBA, 2022.
+O que as cartas permitiam nas escolas radiofônicas?
+`,
+options:[
+"A compra de aparelhos de rádio.",
+"A transmissão das aulas.",
+"A comunicação entre professoras e estudantes.",
+"A divulgação de notícias."
+],
+correct:2
+},
+
+{
+text:`
+Frequência 12 – Projeto Minerva
+
+"O Projeto Minerva utilizava o rádio para ensinar trabalhadores que viviam em regiões remotas."
+Fonte: ARGÔLO, Idália M. T. (2010).
+O que essa iniciativa revela sobre o uso do rádio?
+`,
+options:[
+"O rádio era usado apenas nas capitais.",
+"O rádio servia somente ao entretenimento.",
+"O rádio substituía todas as escolas.",
+"O rádio podia ampliar o acesso à educação em diferentes regiões."
+],
+correct:3
+},
+
+{
+text:`
+Frequência 13 – Ginásio do Ar
+
+"O Ginásio do Ar oferecia aulas pelo rádio para quem desejava concluir os estudos do ensino fundamental."
+Fonte: ARGÔLO, Idália M. T. (2010).
+Quem era o principal público do Ginásio do Ar?
+`,
+options:[
+"Apenas crianças do ensino infantil.",
+"Pessoas que queriam concluir os estudos.",
+"Professores universitários.",
+"Somente radialistas."
+],
+correct:1
+},
+
+{
+text:`
+Frequência 14 – IRDEB
+
+"O IRDEB passou a produzir programas educativos para o rádio, contribuindo para a formação de milhares de pessoas na Bahia."
+Fonte: ARGÔLO, Idália M. T. (2010).
+Qual foi uma das contribuições do IRDEB?
+`,
+options:[
+"Fabricar aparelhos de rádio.",
+"Criar emissoras comerciais.",
+"Produzir apenas programas musicais.",
+"Produzir programas educativos para ampliar o acesso ao conhecimento."
+],
+correct:3
+}
+];
+const MSG=[
+        "Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes.", 
+	    "Excelente! Você tem feito bom uso das fontes históricas.",
+	    "Você acertou de novo! Excelente sacada.",
+		"Que investigação! Você encontrou a evidência certa e recuperou mais um fragmento da História.",
+		"Boa observação! Um verdadeiro caçador também faz inferência.",
+		"Muito bem! Mais uma memória foi recuperada. Continue sintonizando a História.",
+		"Demais! Toda investigação exige atenção às evidências. Você foi no alvo.",
+		"Que maravilha! Você posicionou o dial bem na frequência certa.",
+		"Frequência restaurada! Você interpretou a pista corretamente. As ondas ficaram mais fortes.", 
+	    "Excelente! Você tem feito bom uso das fontes históricas.",
+	    "Você acertou de novo! Boa sacada.",
+		"Boa observação! Um verdadeiro caçador de pistas sabe interpretar as fontes históricas.",
+		"Muito bem! Mais uma memória foi recuperada. Continue sintonizando a História.",
+		"Parabéns! Você demonstrou atenção às fontes e mostra que sabe tudo sobre a educação via rádio no Brasil."
+      ];
+class AudioSystem {
+  constructor() {
+    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    this.isPlayingBGM = false;
+    this.bgmTimeout = null;
+  }
+  
+  resume() {
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  }
+  
+  playTone(freq, type, duration, vol=0.1) {
+    if (this.ctx.state === 'suspended') return;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+    
+    gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+    
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + duration);
+  }
+
+  playCorrect() {
+    this.resume();
+    this.playTone(523.25, 'sine', 0.1, 0.2); // C5
+    setTimeout(() => this.playTone(659.25, 'sine', 0.15, 0.2), 100); // E5
+    setTimeout(() => this.playTone(783.99, 'sine', 0.2, 0.2), 250); // G5
+  }
+
+  playWrong() {
+    this.resume();
+    this.playTone(300, 'sawtooth', 0.2, 0.2);
+    setTimeout(() => this.playTone(250, 'sawtooth', 0.3, 0.2), 150);
+  }
+
+  startBGM() {
+    this.resume();
+    if (this.isPlayingBGM) return;
+    this.isPlayingBGM = true;
+    
+    // O Guarani (simplified theme)
+    const melody = [
+      {f: 329.63, d: 0.2}, // E4
+      {f: 329.63, d: 0.2}, // E4
+      {f: 349.23, d: 0.2}, // F4
+      {f: 392.00, d: 0.4}, // G4
+      {f: 523.25, d: 0.4}, // C5
+      {f: 493.88, d: 0.2}, // B4
+      {f: 440.00, d: 0.2}, // A4
+      {f: 392.00, d: 0.4}, // G4
+      {f: 0, d: 0.2},      // pause
+      {f: 349.23, d: 0.2}, // F4
+      {f: 349.23, d: 0.2}, // F4
+      {f: 329.63, d: 0.2}, // E4
+      {f: 293.66, d: 0.4}, // D4
+      {f: 392.00, d: 0.4}, // G4
+      {f: 349.23, d: 0.2}, // F4
+      {f: 329.63, d: 0.2}, // E4
+      {f: 293.66, d: 0.4}, // D4
+      {f: 0, d: 0.4}       // pause
+    ];
+    
+    let noteIndex = 0;
+    const playNextNote = () => {
+      if (!this.isPlayingBGM) return;
+      const note = melody[noteIndex];
+      if (note.f > 0) {
+        this.playTone(note.f, 'triangle', note.d, 0.05);
+      }
+      noteIndex = (noteIndex + 1) % melody.length;
+      this.bgmTimeout = setTimeout(playNextNote, note.d * 1000 + 50);
+    };
+    playNextNote();
+  }
+  
+  stopBGM() {
+    this.isPlayingBGM = false;
+    if (this.bgmTimeout) {
+      clearTimeout(this.bgmTimeout);
+    }
+  }
+}
+
+const $=s=>document.querySelector(s),cv=$('#c'),ctx=cv.getContext('2d'),au=new AudioSystem();
+let W,H,GH,t=0,qi=0,score=0,tries=0,busy=false,muted=false,px=40,tx=40,dir=1,wk=0,cb=null;
+const rs=()=>{const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);GH=Math.min(150,Math.max(90,H*.16));document.documentElement.style.setProperty('--gh',GH+'px')};
+addEventListener('resize',rs);rs();
+const ERAS=[
+{a:'#150f3a',b:'#5b3a8c',c:'#f2a65a',sun:'#fff2c0',star:1,k:'tower',h:'#2c2250',g:'#241a3a'},
+{a:'#2f80c9',b:'#8fd0f0',c:'#ffd9a0',sun:'#fffbe6',k:'rio',h:'#2e7d5b',g:'#c9a66b'},
+{a:'#7b2d4a',b:'#e8743b',c:'#ffd166',sun:'#fff1c1',k:'city',h:'#5a2d3f',g:'#5b3b2c'},
+{a:'#2d6a8f',b:'#9ad8b8',c:'#ffe8a3',sun:'#fffbe0',k:'rural',h:'#3f8a5a',g:'#8a6b3f'},
+{a:'#0b86a3',b:'#ffd43b',c:'#ff8a3d',sun:'#fff3bf',k:'salvador',h:'#2e8b6e',g:'#b9894f'}];
+const era=i=>i<3?0:i<5?1:i<9?2:i<13?3:4;
+function hill(y,amp,f,col,o){ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(0,H);for(let x=0;x<=W;x+=8)ctx.lineTo(x,y-amp*(Math.sin(x*f+o)+.5*Math.sin(x*f*2.3+o*2)));ctx.lineTo(W,H);ctx.fill()}
+function blocks(y,seed,cols,hmin,hmax,wmin){let x=-10,i=0;while(x<W){const r=Math.abs(Math.sin(i*12.9+seed)),w=wmin+r*40,h=hmin+r*(hmax-hmin);ctx.fillStyle=cols[i%cols.length];ctx.fillRect(x,y-h,w,h);ctx.fillStyle='#ffe9a8';for(let wy=y-h+10;wy<y-8;wy+=16)for(let wx=x+7;wx<x+w-8;wx+=14)if(Math.sin(wx*wy)>-.2)ctx.fillRect(wx,wy,5,7);x+=w+3;i++}}
+function tower(x,y,s){ctx.strokeStyle='#2b2b3a';ctx.lineWidth=2*s;ctx.beginPath();ctx.moveTo(x-18*s,y);ctx.lineTo(x,y-140*s);ctx.lineTo(x+18*s,y);for(let i=1;i<7;i++){const yy=y-i*20*s,hw=(1-i/7)*18*s;ctx.moveTo(x-hw,yy);ctx.lineTo(x+hw,yy);ctx.moveTo(x-hw,yy);ctx.lineTo(x+hw*.5,yy-20*s)}ctx.stroke();
+ctx.strokeStyle='#7fe3ff';for(let k=0;k<3;k++){const r=((t*30+k*22)%66)*s;ctx.globalAlpha=1-r/(66*s);ctx.beginPath();ctx.arc(x,y-145*s,r,-2.4,-.74);ctx.stroke();ctx.beginPath();ctx.arc(x,y-145*s,r,Math.PI+.74,Math.PI+2.4);ctx.stroke()}ctx.globalAlpha=1;ctx.fillStyle='#ff4b3a';ctx.beginPath();ctx.arc(x,y-142*s,3*s,0,7);ctx.fill()}
+function person(){const s=GH/130,y=H-GH*.28;ctx.save();ctx.translate(px+40*s,y);ctx.scale(dir*s,s);const sw=Math.sin(wk)*(cb?1:0);
+ctx.fillStyle='#0004';ctx.beginPath();ctx.ellipse(0,0,30,6,0,0,7);ctx.fill();
+ctx.lineCap='round';ctx.lineWidth=9;ctx.strokeStyle='#1c2733';[[-1],[1]].forEach(([d])=>{ctx.beginPath();ctx.moveTo(d*8,-48);ctx.lineTo(d*8+d*sw*14,-4);ctx.stroke();ctx.fillStyle='#111';ctx.fillRect(d*8+d*sw*14-2,-7,14,7)});
+ctx.fillStyle='#2f4a66';ctx.beginPath();ctx.roundRect(-20,-100,40,60,10);ctx.fill();ctx.fillStyle='#f4ead0';ctx.fillRect(-4,-98,8,30);ctx.fillStyle='#8b1a1a';ctx.fillRect(-2,-98,4,22);
+ctx.strokeStyle='#2f4a66';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(-18,-92);ctx.lineTo(-30,-62-sw*8);ctx.stroke();ctx.beginPath();ctx.moveTo(18,-92);ctx.lineTo(36,-76+sw*8);ctx.stroke();
+ctx.strokeStyle='#6b4a2a';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(36,-76+sw*8);ctx.lineTo(48,-92+sw*8);ctx.stroke();ctx.strokeStyle='#d9a441';ctx.lineWidth=4;ctx.beginPath();ctx.arc(54,-100+sw*8,10,0,7);ctx.stroke();ctx.fillStyle='#bfefff66';ctx.fill();
+ctx.fillStyle='#f1c27d';ctx.beginPath();ctx.arc(0,-116,16,0,7);ctx.fill();ctx.fillStyle='#3a2a1a';ctx.fillRect(-9,-110,18,4);ctx.fillStyle='#000';ctx.fillRect(3,-120,3,3);ctx.fillRect(9,-120,3,3);
+ctx.fillStyle='#6b4a2a';ctx.beginPath();ctx.ellipse(0,-125,26,5,0,0,7);ctx.fill();ctx.beginPath();ctx.roundRect(-14,-146,28,24,8);ctx.fill();ctx.fillStyle='#3a2414';ctx.fillRect(-14,-129,28,5);ctx.restore()}
+function draw(){const e=ERAS[era(qi)],gy=H-GH,g=ctx.createLinearGradient(0,0,0,gy);g.addColorStop(0,e.a);g.addColorStop(.6,e.b);g.addColorStop(1,e.c);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+if(e.star){ctx.fillStyle='#fff';for(let i=0;i<70;i++){ctx.globalAlpha=.3+.7*Math.abs(Math.sin(t*1.6+i));ctx.fillRect((i*137.5)%W,(i*71.3)%(H*.55),1.8,1.8)}ctx.globalAlpha=1}
+const sx=W*.82,sy=H*.2,gl=ctx.createRadialGradient(sx,sy,8,sx,sy,130);gl.addColorStop(0,e.sun);gl.addColorStop(1,'transparent');ctx.fillStyle=gl;ctx.fillRect(sx-130,sy-130,260,260);ctx.fillStyle=e.sun;ctx.beginPath();ctx.arc(sx,sy,32,0,7);ctx.fill();
+ctx.fillStyle='#ffffff55';for(let i=0;i<4;i++){const cx=((t*8+i*W/3)%(W+200))-100,cy=H*.12+i*28;ctx.beginPath();ctx.ellipse(cx,cy,60,14,0,0,7);ctx.ellipse(cx+30,cy-8,36,12,0,0,7);ctx.fill()}
+hill(gy-20,50,.004,e.h+'99',1);
+if(e.k=='rio'){ctx.fillStyle='#3f6b5a';[[.25,.7],[.62,.5]].forEach(([p,s])=>{ctx.beginPath();ctx.ellipse(W*p,gy-10,110*s*2,150*s,0,Math.PI,0);ctx.fill()});ctx.fillStyle='#2a7fb8';ctx.fillRect(0,gy-22,W,22)}
+if(e.k=='city')blocks(gy,3,['#4a2540','#5e2f4a','#3b1d33'],60,190,34);
+if(e.k=='salvador'){ctx.fillStyle='#1f8fb3';ctx.fillRect(0,gy-26,W,26);blocks(gy,7,['#e8604c','#f2b134','#3fa7a3','#e9d8a6','#6c8ebf'],40,120,40)}
+if(e.k=='rural'){hill(gy,30,.006,'#2f7a4a',4);for(let x=60;x<W;x+=180+Math.sin(x)*40){ctx.fillStyle='#7a5230';ctx.fillRect(x,gy-34,40,34);ctx.fillStyle='#b5532f';ctx.beginPath();ctx.moveTo(x-6,gy-34);ctx.lineTo(x+20,gy-58);ctx.lineTo(x+46,gy-34);ctx.fill();ctx.fillStyle='#5a3a1c';ctx.fillRect(x+112,gy-60,5,60);ctx.fillStyle='#2f8a4a';for(let a=0;a<5;a++){ctx.beginPath();ctx.ellipse(x+114+Math.cos(a*1.3)*14,gy-60+Math.sin(a*1.3)*6,16,4,a*1.3,0,7);ctx.fill()}}}
+const ts=Math.min(1.1,H/650);tower(W*.06,gy+2,ts);tower(W*.94,gy+2,ts);
+const gg=ctx.createLinearGradient(0,gy,0,H);gg.addColorStop(0,e.g);gg.addColorStop(1,'#00000066');ctx.fillStyle=e.g;ctx.fillRect(0,gy,W,GH);ctx.fillStyle=gg;ctx.fillRect(0,gy,W,GH);ctx.fillStyle='#ffffff22';ctx.fillRect(0,gy,W,3);
+person()}
+function loop(ts){const dt=Math.min(.05,(ts-(loop.l||ts))/1e3);loop.l=ts;t+=dt;const d=tx-px;if(Math.abs(d)>4){dir=Math.sign(d);px+=dir*Math.min(Math.abs(d),Math.max(140,W*.35)*dt);wk+=dt*12}else if(cb){px=tx;const f=cb;cb=null;wk=0;f()}draw();requestAnimationFrame(loop)}
+function parse(raw){raw=raw.trim();const m=raw.lastIndexOf('?'),st=/^(Ao ler|De acordo|Se você|Se empresas|Ao chamar|Qual\b|Quem\b|Por que\b|O que\b|Desafio\b|Você acabou|Descubra\b)/i;let qs=-1;if(m>=0){let acc=0;raw.slice(0,m+1).split('\n').forEach(l=>{if(st.test(l.trim()))qs=acc+l.search(/\S/);acc+=l.length+1})}if(qs<0)qs=raw.lastIndexOf('\n',m>=0?m:raw.length)+1;
+const ctxT=raw.slice(0,qs).trim(),qq=raw.slice(qs).trim(),ls=ctxT.split('\n'),title=ls.shift().trim(),rest=ls.join('\n').trim(),fm=rest.match(/(^|\n)\s*Fonte:/i);
+return fm?{title,c:rest.slice(0,fm.index).trim(),s:rest.slice(fm.index).trim(),q:qq}:{title,c:rest,s:'',q:qq}}
+function load(i){qi=i;tries=0;busy=false;px=tx=40;dir=1;const p=parse(Q[i].text);$('#qt').textContent=p.title;$('#qc').textContent=p.c;$('#qs').textContent=p.s;$('#qq').textContent=p.q;$('#qc').style.display=p.c?'':'none';$('#qs').style.display=p.s?'':'none';
+$('#cards').innerHTML='';Q[i].options.forEach((o,k)=>{const b=document.createElement('button');b.className='card';b.innerHTML='<i></i>';b.append(o);b.onclick=()=>pick(k,b);$('#cards').append(b)});
+const pc=i/Q.length*100;$('#bar').style.width=pc+'%';$('#needle').style.left=`calc(${pc}% - 2px)`;$('#fr').textContent=`${i+1}/${Q.length}`;$('#sc').textContent=score+' pts';$('#q').scrollTop=0;
+$('#st').classList.remove('on');void $('#st').offsetWidth;$('#st').classList.add('on')}
+const sfx=f=>{if(!muted)au[f]()};
+function pick(k,b){if(busy)return;busy=true;const r=b.getBoundingClientRect();tx=Math.max(10,Math.min(W-90,r.left+r.width/2-60));cb=()=>answer(k,b)}
+function show(msg,label,fn){$('#fm').textContent=msg;$('#fbtn').textContent=label;$('#fbtn').onclick=()=>{$('#fb').classList.add('hid');fn()};$('#fb').classList.remove('hid')}
+function answer(k,b){if(k==Q[qi].correct){b.classList.add('ok');sfx('playCorrect');score+=tries?5:10;$('#sc').textContent=score+' pts';const last=qi==Q.length-1;setTimeout(()=>show(MSG[qi],last?'Ver resultado':'Próxima frequência ▸',()=>last?finish():load(qi+1)),500)}
+else{b.classList.add('bad');sfx('playWrong');tries++;setTimeout(()=>show('Hmm… a frequência ficou instável! Releia a fonte e tente outra vez.','Tentar de novo',()=>{tx=40;busy=false}),450)}}
+function finish(){au.stopBGM();let hs=0;try{hs=+localStorage.getItem('rp_hs')||0;if(score>hs){hs=score;localStorage.setItem('rp_hs',hs)}}catch(e){hs=Math.max(hs,score)}
+$('#app').classList.add('hid');$('#fin').textContent=`Pontos: ${score} · Recorde: ${hs}`;const n=score>=Q.length*10?3:score>=Q.length*7?2:1;$('#stars').textContent='★'.repeat(n)+'☆'.repeat(3-n);$('#end').classList.remove('hid')}
+function begin(){score=0;$('#start').classList.add('hid');$('#end').classList.add('hid');$('#app').classList.remove('hid');au.resume();if(!muted)au.startBGM();load(0)}
+$('#go').onclick=begin;$('#again').onclick=begin;
+$('#mute').onclick=()=>{muted=!muted;$('#mute').textContent=muted?'🔇':'🔊';muted?au.stopBGM():au.startBGM()};
+requestAnimationFrame(loop);
+</script></body></html>
